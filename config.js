@@ -5852,7 +5852,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1a", module: 1, title: "1a — What Is an Algorithm?", category: "Computational Thinking",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — Algorithms. A finite set of step-by-step instructions that accomplishes a task is called an ___.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Computational Thinking. What term is described by the following definition? A finite set of step-by-step instructions that accomplishes a task.\n\nSubmit as flag{word} (lowercase).",
         hint: "A recipe is one.",
         flagHash: "e165ad962d510917b1dbd9c289ce95aac0de155864b0095001ef193be7f912cd" },
       { difficulty: "Medium", points: 100,
@@ -5868,7 +5868,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1b", module: 1, title: "2a — Decomposition & Abstraction", category: "Computational Thinking",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — Abstraction. Reducing complexity by focusing on the main idea and hiding unnecessary detail is called ___.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Computational Thinking. What term is described by the following definition? Reducing complexity by focusing on the main idea and hiding unnecessary detail.\n\nSubmit as flag{word} (lowercase).",
         hint: "Hiding detail.",
         flagHash: "5f46d98c4b621039b59b05e84990cc59fe9e4718c08603506addf49eb8fba318" },
       { difficulty: "Medium", points: 100,
@@ -5973,15 +5973,15 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1-keys", module: 1, title: "7a — Encryption Keys", category: "Encryption",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — Keys. In cryptography, the piece of information that controls how data is encrypted or decrypted is called a ___.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Encryption. What term is described by the following definition? The piece of information that controls how data is encrypted or decrypted.\n\nSubmit as flag{word} (lowercase).",
         hint: "You need one to lock or unlock the message.",
         flagHash: "d4a44801327f6bdbad722255e7dbad5b319afb83fb8b50d18b6b6ec7d33e6963" },
       { difficulty: "Medium", points: 100,
-        prompt: "Objective — Symmetric encryption. An encryption scheme where the SAME key both encrypts and decrypts is called ___ encryption.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Encryption. An encryption scheme where the SAME key both encrypts and decrypts is called ___ encryption.\n\nSubmit as flag{word} (lowercase).",
         hint: "Both sides share one identical key.",
         flagHash: "0b84a426da5ad73abfd7f5e4a73a667621b374d6b8d3349074058a7f1ba9c8ed" },
       { difficulty: "Hard", points: 150,
-        prompt: "Objective — Asymmetric encryption. An encryption scheme that uses a public key to encrypt and a different, mathematically linked private key to decrypt is called ___ encryption.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Encryption. An encryption scheme that uses a public key to encrypt and a different, mathematically linked private key to decrypt is called ___ encryption.\n\nSubmit as flag{word} (lowercase).",
         hint: "Two different, mathematically related keys — one public, one private.",
         flagHash: "fdb0d9f92ace8928ef9b642ec772d625e5f5921af3b1d8e13ce3aca6427b933c" }
     ] },
@@ -6062,7 +6062,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1-langs", module: 1, title: "12a — Artificial vs. Natural Languages", category: "Computational Thinking",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — Programming languages. A language with precise, unambiguous, well-defined syntax created for a specific purpose — unlike a natural human language — is called an ___ ___.\n\nSubmit as flag{two words} (lowercase).",
+        prompt: "Objective — Computational Thinking. What term is described by the following definition? A language with precise, unambiguous, well-defined syntax created for a specific purpose, unlike a natural human language.\n\nSubmit as flag{two words} (lowercase).",
         hint: "Programming languages are one example of this broader category.",
         flagHash: "a3c30ca9269dfbd065676069325a7bebd545ba528cedab898c8cfe8f244a8620" },
       { difficulty: "Medium", points: 100,
@@ -6078,7 +6078,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1-langlevel2", module: 1, title: "13a — High-Level vs. Low-Level", category: "Computational Thinking",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — High-level vs. low-level languages. A language that closely resembles human language and hides hardware details, like Python, is a ___-level language.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Programming languages. A language that closely resembles human language and hides hardware details, like Python, is a ___-level language.\n\nSubmit as flag{word} (lowercase).",
         hint: "More abstraction from the hardware = this level.",
         flagHash: "1b10dc5ff97b64d726a4a086a9f1d6cf6f13b48c33d8c20ac2765d2cd0254891" },
       { difficulty: "Medium", points: 100,
@@ -6086,7 +6086,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
         hint: "Direct hardware control needs less abstraction, not more.",
         flagHash: "b17a1cf1311cd73c0d542ab8354229231e1beb1265dc28d46e410c970ef5f196" },
       { difficulty: "Hard", points: 150,
-        prompt: "Objective — Compilation. The process that translates high-level abstract instructions into the low-level machine code a processor actually requires is called ___.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Programming languages. What term is described by the following definition? The process that translates high-level abstract instructions into the low-level machine code a processor actually requires.\n\nSubmit as flag{word} (lowercase).",
         hint: "Turns your Python/Java into ones and zeros the chip can run.",
         flagHash: "77984b3c7c29c838d0f8b571b90bd7f35ffda66df9bff1cd94440133f1b9cdaf" }
     ] },
@@ -6113,7 +6113,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1-pseudocode", module: 1, title: "15a — Pseudocode & Development", category: "Computational Thinking",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — Pseudocode. Writing out an algorithm in structured, informal language before translating it into real code is called writing ___.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Program development. What term is described by the following definition? Writing out an algorithm in structured, informal language before translating it into real code.\n\nSubmit as flag{word} (lowercase).",
         hint: "Not real code — a structured plain-language draft of the algorithm.",
         flagHash: "1c132b3e3768364850dd681ab981772467c0ab076091b672f6276d197fc40a3c" },
       { difficulty: "Medium", points: 100,
@@ -6140,7 +6140,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1-effic2", module: 1, title: "16b — Algorithms & Efficiency", category: "Computational Thinking",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — Algorithmic efficiency. The measure of how much time and/or memory an algorithm uses to run is called its ___.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Computational Thinking. What term is described by the following definition? The measure of how much time and/or memory an algorithm uses to run.\n\nSubmit as flag{word} (lowercase).",
         hint: "Faster and leaner = more of this.",
         flagHash: "e4ef8500a77c2559aa4e177849b3372d69f34025962670e709c03ce6971a9034" },
       { difficulty: "Medium", points: 100,
@@ -6148,7 +6148,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
         hint: "It halves a SORTED list each step.",
         flagHash: "8df4578b0ae5d8875b5f269168532fc1cdeac556f0f41bdc0e43ce090975c3cd" },
       { difficulty: "Hard", points: 150,
-        prompt: "Objective — Scalability. The capacity for a system or algorithm to keep performing well as the size of the problem grows much larger is called ___.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Algorithmic efficiency. What term is described by the following definition? The capacity for a system or algorithm to keep performing well as the size of the problem grows much larger.\n\nSubmit as flag{word} (lowercase).",
         hint: "Does it still work well at a much bigger size?",
         flagHash: "afe0dfc6ece90b4e834b1aa7b2543855fcc7558a60b40bb9a1f3c0200a74397d" }
     ] },
@@ -6173,7 +6173,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1-speedup", module: 1, title: "16e (ext) — Parallel Computing & Speedup", category: "Computational Thinking",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — Parallel & distributed computing. A model in which a program is broken into pieces, some of which run at the same time, is ___ ___.\n\nSubmit as flag{two words} (lowercase).",
+        prompt: "Objective — Computational Thinking. What term is described by the following definition? A model in which a program is broken into pieces, some of which run at the same time.\n\nSubmit as flag{two words} (lowercase).",
         hint: "Pieces run at the same time.",
         flagHash: "5ffb708e8d184373d0be826cd0a330a6d3a2f22eee933bd58c58312b46212dc0" },
       { difficulty: "Medium", points: 100,
@@ -6189,7 +6189,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1-moore", module: 1, title: "17a — Moore's Law", category: "Computational Thinking",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — Moore's Law. The observation that the number of transistors on a computer chip roughly doubles on a regular schedule is called ___ ___.\n\nSubmit as flag{two words, no apostrophe} (lowercase).",
+        prompt: "Objective — Computer hardware trends. The observation that the number of transistors on a computer chip roughly doubles on a regular schedule is called ___ ___.\n\nSubmit as flag{two words, no apostrophe} (lowercase).",
         hint: "Named for an Intel co-founder.",
         flagHash: "9d854f7377537f779e084d4073f6ff128ae6172613901649fa250a904b394fe9" },
       { difficulty: "Medium", points: 100,
@@ -6205,7 +6205,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1-heuristics", module: 1, title: "18a — Heuristics", category: "Computational Thinking",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — Heuristics. An approach that gives a 'good enough' solution when a perfect one is impractical or impossible is a ___.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Computational Thinking. What term is described by the following definition? An approach that gives a 'good enough' solution when a perfect one is impractical or impossible.\n\nSubmit as flag{word} (lowercase).",
         hint: "A problem solver's 'rule of thumb'.",
         flagHash: "0ba600dc91096cc6250d73b1bf62d9f522f43506563f3361bc5bc6c701f1e290" },
       { difficulty: "Medium", points: 100,
@@ -6221,7 +6221,7 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m1-bias", module: 1, title: "19a — Algorithmic Bias", category: "Computational Thinking",
     levels: [
       { difficulty: "Easy", points: 50,
-        prompt: "Objective — Algorithmic bias. When an algorithm systematically produces unfair outcomes for a group of people, often due to skewed training data, this is called algorithmic ___.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Computing Impacts. When an algorithm systematically produces unfair outcomes for a group of people, often due to skewed training data, this is called algorithmic ___.\n\nSubmit as flag{word} (lowercase).",
         hint: "The unfairness has a name — one word.",
         flagHash: "d548a37b58af739ba6fa6d7620f140c30aabbc21b4bd9ca6ecc4542c74f7ba0b" },
       { difficulty: "Medium", points: 100,
@@ -6241,11 +6241,11 @@ window.COURSE_CONFIG.apcsp.ctf = {
         hint: "A shortened, one-word version of 'inclusion coding'.",
         flagHash: "ff099a7d419c133351b3875bfbf0ce2c9b939a03cf451f4cf8dcb5f12a779542" },
       { difficulty: "Medium", points: 100,
-        prompt: "Objective — Inclusive data. Using training data that fairly represents every group, instead of favoring one, is called an ___ data set.\n\nSubmit as flag{word} (lowercase).",
+        prompt: "Objective — Reducing algorithmic bias. Using training data that fairly represents every group, instead of favoring one, is called an ___ data set.\n\nSubmit as flag{word} (lowercase).",
         hint: "The opposite of leaving groups out.",
         flagHash: "a44eb3e0a7f4076881bf4fca30e06303a86b61ac8fcd701d30cf10fdfc4638db" },
       { difficulty: "Hard", points: 150,
-        prompt: "Objective — Mitigating algorithmic bias. Reviewing training data and model outputs for unfair patterns before deployment is called algorithmic ___ ___.\n\nSubmit as flag{two words} (lowercase).",
+        prompt: "Objective — Computing Impacts. Reviewing training data and model outputs for unfair patterns before deployment is called algorithmic ___ ___.\n\nSubmit as flag{two words} (lowercase).",
         hint: "You're checking the model for bias — two words, first word is 'bias'.",
         flagHash: "d72c481dcdcd5c457ee3fc31bf52c52a00963220208f89eb679a7b3880643bee" }
     ] },

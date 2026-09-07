@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Live Leaderboard — Classroom Display</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14; --panel:#0d1420; --panel2:#101a28; --border:#1e3350; --border2:#244a6d;
+  --text:#cfe0f3; --bright:#ffffff; --muted:#9fb4cc; --dim:#7f9cb8; --faint:#5c7592;
+  --accent:#00b3ff; --accent2:#7dd8ff; --gold:#ffd54a; --silver:#cbd5e1; --bronze:#e08a4a;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden;}
+.mono{font-family:'JetBrains Mono',monospace;}
+button{font-family:inherit;cursor:pointer;}
+#bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+#bgfx .scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg, color-mix(in oklab, var(--accent) 10%, transparent) 0, color-mix(in oklab, var(--accent) 10%, transparent) 1px, transparent 2px, transparent 4px);opacity:.5;}
+#bgfx .glow{position:absolute;width:70vw;height:70vw;border-radius:50%;background:radial-gradient(circle, color-mix(in oklab, var(--accent) 22%, transparent) 0%, transparent 65%);top:-25vw;left:-15vw;filter:blur(10px);animation:drift 22s ease-in-out infinite alternate;}
+#bgfx .glow2{position:absolute;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle, color-mix(in oklab, var(--accent2) 16%, transparent) 0%, transparent 65%);bottom:-20vw;right:-10vw;filter:blur(10px);animation:drift 26s ease-in-out infinite alternate-reverse;}
+@keyframes drift{0%{transform:translate(0,0) scale(1);}100%{transform:translate(4vw,3vw) scale(1.08);}}
+@keyframes spin{to{transform:rotate(360deg);}}
+@keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:.15;}}
+@keyframes flashRow{0%{background:color-mix(in oklab, var(--accent) 30%, var(--panel));}100%{background:var(--panel);}}
+@keyframes riseIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes popIn{from{opacity:0;transform:translateY(30px) scale(.94);}to{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes flicker{0%,100%{opacity:1;}45%{opacity:.75;}55%{opacity:.9;}}
+.spin{width:22px;height:22px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;display:inline-block;}
+#app{position:relative;z-index:1;height:100%;display:flex;flex-direction:column;}
+::-webkit-scrollbar{display:none;}
+
+/* ---- gate / picker ---- */
+.gateWrap{max-width:460px;margin:auto;padding:36px;text-align:center;}
+.btnG{width:100%;padding:14px;background:#fff;color:#1f2733;border:1px solid #fff;border-radius:10px;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;gap:10px;}
+.pickCard{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin-bottom:10px;text-align:left;display:flex;align-items:center;justify-content:space-between;gap:14px;transition:border-color .15s,transform .1s;}
+.pickCard:hover{border-color:var(--accent);transform:translateY(-1px);}
+
+/* ---- board ---- */
+#board{display:none;height:100%;display:none;flex-direction:column;padding:clamp(18px,3vw,44px);}
+#head{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:clamp(14px,2vw,26px);}
+#titleWrap .tag{font-size:clamp(11px,1.1vw,14px);letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:6px;}
+#titleWrap h1{margin:0;font-weight:800;font-size:clamp(28px,4.2vw,54px);color:var(--bright);letter-spacing:-1px;line-height:1;}
+#titleWrap .sub{font-size:clamp(13px,1.3vw,17px);color:var(--dim);margin-top:6px;}
+#hudRight{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:8px;}
+#clock{font-size:clamp(20px,2.4vw,30px);color:var(--bright);font-weight:700;}
+#liveRow{display:flex;align-items:center;gap:8px;font-size:clamp(11px,1.1vw,13px);color:var(--muted);}
+#liveDot{width:9px;height:9px;border-radius:50%;background:#5cf07a;box-shadow:0 0 8px #5cf07a;animation:blink 1.6s infinite;}
+.exitBtn{background:none;border:1px solid var(--border2);color:var(--faint);border-radius:8px;padding:6px 12px;font-size:12px;}
+.exitBtn:hover{border-color:var(--accent);color:var(--accent);}
+
+#podium{display:grid;grid-template-columns:1fr 1fr 1fr;gap:clamp(10px,1.4vw,20px);align-items:end;margin-bottom:clamp(16px,2.2vw,28px);}
+.pod{border-radius:16px;padding:clamp(14px,1.8vw,26px) clamp(10px,1.4vw,20px);text-align:center;position:relative;border:1px solid var(--border);background:linear-gradient(160deg, var(--panel2), var(--panel));animation:popIn .5s ease both;}
+.pod .medal{font-size:clamp(22px,2.6vw,34px);margin-bottom:6px;}
+.pod .rank{font-family:'JetBrains Mono',monospace;font-size:clamp(11px,1.1vw,13px);letter-spacing:2px;color:var(--faint);}
+.pod .handle{font-weight:800;color:var(--bright);font-size:clamp(16px,2vw,26px);margin:6px 0 4px;word-break:break-word;}
+.pod .xp{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:clamp(18px,2.4vw,30px);}
+#pod1{order:2;transform:scale(1.08);z-index:2;box-shadow:0 0 40px -10px color-mix(in oklab, var(--gold) 60%, transparent);border-color:var(--gold);}
+#pod2{order:1;}
+#pod3{order:3;}
+#pod2,#pod3{opacity:.94;}
+
+#listWrap{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding-right:4px;}
+.row{display:grid;grid-template-columns:44px 1fr auto auto auto;align-items:center;gap:clamp(10px,1.4vw,18px);background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:clamp(9px,1.1vw,14px) clamp(12px,1.6vw,20px);animation:riseIn .35s ease both;}
+.row .rk{font-family:'JetBrains Mono',monospace;color:var(--faint);font-size:clamp(13px,1.3vw,16px);text-align:center;}
+.row .hd{font-weight:700;color:var(--text);font-size:clamp(14px,1.6vw,19px);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.row .streak{font-family:'JetBrains Mono',monospace;font-size:clamp(11px,1.1vw,13px);color:var(--amber,#ffcf5c);white-space:nowrap;}
+.row .badges{font-family:'JetBrains Mono',monospace;font-size:clamp(11px,1.1vw,13px);color:var(--faint);white-space:nowrap;}
+.row .xpwrap{display:flex;align-items:center;gap:10px;min-width:clamp(90px,14vw,180px);}
+.row .bar{flex:1;height:8px;border-radius:6px;background:var(--border);overflow:hidden;}
+.row .bar i{display:block;height:100%;background:linear-gradient(90deg, var(--accent), var(--accent2));border-radius:6px;}
+.row .xpnum{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--bright);font-size:clamp(13px,1.4vw,17px);min-width:52px;text-align:right;}
+.rowUp{animation:flashRow 1.4s ease;}
+
+#empty{margin:auto;text-align:center;color:var(--dim);font-size:16px;}
+#footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-size:clamp(10px,1vw,12px);color:var(--faint);font-family:'JetBrains Mono',monospace;}
+#ring{width:16px;height:16px;}
+</style>
+</head>
+<body>
+<div id="bgfx"><div class="scan"></div><div class="glow"></div><div class="glow2"></div></div>
+<div id="app">
+
+  <div id="gate" class="gateWrap" style="display:none;">
+    <div class="mono" style="font-size:11px;letter-spacing:2px;color:var(--faint);margin-bottom:10px;">LIVE LEADERBOARD</div>
+    <h1 style="font-size:24px;color:var(--bright);margin:0 0 8px;">Sign in to open the board</h1>
+    <p style="color:var(--dim);font-size:13px;margin:0 0 22px;">Same account as the teacher dashboard.</p>
+    <button class="btnG" id="loginBtn" onclick="doLogin()">
+      <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M45.1 24.5c0-1.6-.1-3.2-.4-4.7H24v8.9h11.8c-.5 2.7-2 5-4.4 6.6v5.5h7.1c4.1-3.8 6.6-9.4 6.6-16.3z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.5c-2 1.4-4.6 2.2-7.4 2.2-5.7 0-10.5-3.8-12.2-9.1H4.5v5.7C8 41.6 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.8 28.3c-.5-1.4-.8-2.9-.8-4.3s.3-2.9.8-4.3v-5.7H4.5C3.2 16.8 2.5 20.3 2.5 24s.7 7.2 2 10.1z"/><path fill="#EA4335" d="M24 10.7c3.2 0 6 1.1 8.3 3.2l6.3-6.3C34.9 4.2 29.9 2 24 2 15.4 2 8 6.4 4.5 13.9l7.3 5.7c1.7-5.3 6.5-9.1 12.2-8.9z"/></svg>
+      Sign in with Google
+    </button>
+    <div id="loginErr" class="mono" style="color:#ff6b6b;font-size:12px;margin-top:12px;min-height:16px;"></div>
+    <div id="notTeacher" style="display:none;color:var(--dim);font-size:13px;margin-top:16px;">Signed in, but this account isn't the teacher account.</div>
+  </div>
+
+  <div id="pickWrap" class="gateWrap" style="display:none;max-width:560px;">
+    <div class="mono" style="font-size:11px;letter-spacing:2px;color:var(--faint);margin-bottom:14px;">LIVE LEADERBOARD · PICK A CLASS</div>
+    <div id="pickList"></div>
+  </div>
+
+  <div id="board">
+    <div id="head">
+      <div id="titleWrap">
+        <div class="tag" id="tagLine">// classroom board</div>
+        <h1 id="className">—</h1>
+        <div class="sub" id="courseName">—</div>
+      </div>
+      <div id="hudRight">
+        <div id="clock">--:--</div>
+        <div id="liveRow"><span id="liveDot"></span> LIVE · updates every 60s</div>
+        <button class="exitBtn" onclick="toPicker()">← switch class</button>
+      </div>
+    </div>
+
+    <div id="podium"></div>
+    <div id="listWrap"></div>
+    <div id="empty" style="display:none;">No captures on the board yet — first flag takes the top spot.</div>
+
+    <div id="footer">
+      <span id="fCount">—</span>
+      <span id="fUpdated">—</span>
+    </div>
+  </div>
+
+</div>
+
+<script src="config.js"></script>
+<script src="cipher.js"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script>
+var THEMES = {
+  cyber1: { accent:"#00b3ff", accent2:"#7dd8ff", label:"Cybersecurity 1", tag:"security operations center" },
+  cyber2: { accent:"#39ff88", accent2:"#7dffb3", label:"AP Cybersecurity 2", tag:"advanced threat board" },
+  cyber3: { accent:"#d4af37", accent2:"#f4d160", label:"Cybersecurity 3", tag:"capstone leaderboard" },
+  apcsp:  { accent:"#a855f7", accent2:"#c98bff", label:"AP Computer Science Principles", tag:"byte bounty board" },
+  web3:   { accent:"#f7931a", accent2:"#ffb454", label:"Intro to Web 3.0", tag:"block hunter board" }
+};
+function el(id){ return document.getElementById(id); }
+var AUTH = window.CTF_AUTH;
+async function rpc(fn,args){ return AUTH.rpc(fn, args||{}); }
+var qs = new URLSearchParams(location.search);
+var courseParam = qs.get("course");
+var CLASSES = [], CUR = null, PREV = {};
+var timer = null;
+
+function applyTheme(course){
+  var t = THEMES[course] || THEMES.cyber1;
+  document.documentElement.style.setProperty("--accent", t.accent);
+  document.documentElement.style.setProperty("--accent2", t.accent2);
+  return t;
+}
+
+async function doLogin(){
+  var b = el("loginBtn"); b.disabled = true;
+  try{ await AUTH.signIn(); }
+  catch(e){ el("loginErr").textContent = "Couldn't reach Google. Check your connection."; b.disabled = false; }
+}
+
+function showGate(notTeacher){
+  el("gate").style.display = "block";
+  el("pickWrap").style.display = "none";
+  el("board").style.display = "none";
+  el("notTeacher").style.display = notTeacher ? "block" : "none";
+}
+
+function toPicker(){
+  clearInterval(timer);
+  el("board").style.display = "none";
+  el("gate").style.display = "none";
+  el("pickWrap").style.display = "block";
+  renderPicker();
+}
+
+function renderPicker(){
+  var list = CLASSES;
+  if (courseParam) list = list.filter(function(c){ return c.course === courseParam; });
+  if (!list.length){
+    el("pickList").innerHTML = '<div style="color:var(--dim);font-size:13px;">No classes found' + (courseParam ? ' for "' + courseParam + '"' : '') + '. Create one on the teacher dashboard first.</div>';
+    return;
+  }
+  el("pickList").innerHTML = list.map(function(c){
+    var t = THEMES[c.course] || THEMES.cyber1;
+    return '<div class="pickCard" onclick="selectClass(\'' + c.id + '\')" style="border-color:' + t.accent + '22;">' +
+      '<div><div style="font-weight:700;color:var(--bright);font-size:16px;">' + esc(c.name) + '</div>' +
+      '<div class="mono" style="font-size:11px;color:var(--faint);margin-top:2px;">' + esc(t.label) + ' · ' + c.student_count + ' students</div></div>' +
+      '<div class="mono" style="font-size:20px;color:' + t.accent + ';">→</div></div>';
+  }).join("");
+}
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+function selectClass(id){
+  CUR = CLASSES.filter(function(c){ return c.id === id; })[0];
+  if (!CUR) return;
+  var t = applyTheme(CUR.course);
+  localStorage.setItem("board-last-class-" + (courseParam || "any"), id);
+  el("pickWrap").style.display = "none";
+  el("gate").style.display = "none";
+  el("board").style.display = "flex";
+  el("tagLine").textContent = "// " + t.tag;
+  el("className").textContent = CUR.name;
+  el("courseName").textContent = t.label + " · LEADERBOARD";
+  PREV = {};
+  loadBoard();
+  clearInterval(timer);
+  timer = setInterval(loadBoard, 60000);
+  tickClock(); setInterval(tickClock, 1000);
+}
+
+function tickClock(){
+  el("clock").textContent = new Date().toLocaleTimeString(undefined, {hour:"numeric", minute:"2-digit"});
+}
+
+var MEDALS = ["🥇","🥈","🥉"];
+async function loadBoard(){
+  if (!CUR) return;
+  var data = [];
+  try{ data = await rpc("ctf_t_leaderboard", { p_class: CUR.id }) || []; }
+  catch(e){ return; }
+  if (data.error) return;
+  renderBoard(data);
+}
+
+function renderBoard(data){
+  el("fCount").textContent = data.length + " on the board";
+  el("fUpdated").textContent = "updated " + new Date().toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit",second:"2-digit"});
+  if (!data.length){
+    el("podium").style.display = "none";
+    el("listWrap").style.display = "none";
+    el("empty").style.display = "block";
+    return;
+  }
+  el("empty").style.display = "none";
+  el("podium").style.display = "grid";
+  el("listWrap").style.display = "flex";
+
+  var top3 = data.slice(0,3), rest = data.slice(3);
+  var maxXp = data[0].xp || 1;
+
+  el("podium").innerHTML = top3.map(function(p, i){
+    return '<div class="pod" id="pod' + (i+1) + '">' +
+      '<div class="medal">' + MEDALS[i] + '</div>' +
+      '<div class="rank">RANK ' + p.pos + '</div>' +
+      '<div class="handle">' + esc(p.handle) + '</div>' +
+      '<div class="xp" style="color:var(--accent);">' + p.xp + ' XP</div>' +
+      (p.streak_count > 1 ? '<div class="streak" style="margin-top:6px;">🔥 ' + p.streak_count + ' day streak</div>' : '') +
+    '</div>';
+  }).join("");
+  // pad podium slots if fewer than 3 players
+  while (top3.length < 3){ top3.push(null); }
+
+  el("listWrap").innerHTML = rest.map(function(p){
+    var pct = Math.max(4, Math.round((p.xp / maxXp) * 100));
+    var isUp = PREV[p.handle] != null && p.xp > PREV[p.handle];
+    return '<div class="row' + (isUp ? ' rowUp' : '') + '">' +
+      '<div class="rk">#' + p.pos + '</div>' +
+      '<div class="hd">' + esc(p.handle) + '</div>' +
+      '<div class="streak">' + (p.streak_count > 1 ? '🔥 ' + p.streak_count : '') + '</div>' +
+      '<div class="badges">' + (p.badge_count ? '🎖 ' + p.badge_count : '') + '</div>' +
+      '<div class="xpwrap"><div class="bar"><i style="width:' + pct + '%;"></i></div><div class="xpnum">' + p.xp + '</div></div>' +
+    '</div>';
+  }).join("");
+
+  data.forEach(function(p){ PREV[p.handle] = p.xp; });
+}
+
+(async function(){
+  if (!AUTH || !AUTH.online){ el("gate").style.display = "block"; el("loginBtn").disabled = true; el("loginErr").textContent = "Backend not configured."; return; }
+  var u = null;
+  try{ u = await AUTH.user(); }catch(e){}
+  if (!u){ showGate(false); return; }
+  var whoami = null;
+  try{ whoami = await rpc("ctf_t_whoami"); }catch(e){}
+  var isT = whoami && !whoami.error && (whoami.teacher || whoami.owner || whoami.role);
+  if (!isT){ showGate(true); return; }
+  try{ CLASSES = await rpc("ctf_t_classes") || []; }catch(e){ CLASSES = []; }
+  applyTheme(courseParam || "cyber1");
+  var lastId = localStorage.getItem("board-last-class-" + (courseParam || "any"));
+  var last = lastId && CLASSES.filter(function(c){ return c.id === lastId; })[0];
+  if (last){ selectClass(last.id); }
+  else { el("pickWrap").style.display = "block"; renderPicker(); }
+})();
+</script>
+</body>
+</html>

@@ -2268,6 +2268,7 @@
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">${tabs}</div>`;
     if (!solvedThis && !isStarted(key)) return header + gateHtml(key, lv.prompt) + `</div>`;
     return header + `
+        ${lv.img ? `<img src="${esc(lv.img)}" alt="" style="max-width:100%;border-radius:10px;border:1px solid var(--border2);margin-bottom:14px;display:block;" />` : ""}
         <p style="white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.65;color:var(--text);margin:0 0 14px;">${esc(lv.prompt)}</p>
         ${hintMarkup(c.id + "#" + li, (lv.points || 0), lv.hint)}
         ${solvedThis
