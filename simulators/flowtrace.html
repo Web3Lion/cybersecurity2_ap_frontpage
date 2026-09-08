@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<!-- © 2026 Robert Reasey, South Fayette School District. Licensed CC BY-NC 4.0 (attribution required, no commercial use). See LICENSE.md. -->
+<html lang="en">
+<head>
+<script>(function(){try{var t=localStorage.getItem('course-theme')||'dark';document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flow Trace — Flowchart Output Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0e14;--panel:#0b1220;--panel2:#0c1626;--panel3:#0e2136;--border:#1e3350;--border2:#172436;--border3:#244a6d;--border-hi:#2f5580;--text:#cfe0f3;--bright:#eaf4ff;--muted:#a9bfd6;--dim:#7f9cb8;--faint:#5c7592;--fainter:#3d5069;--accent:#00b3ff;--accent2:#7dd8ff;--bad:#ff5c7a;--warn:#ffcf5c;--ok:#4fd68a;}
+:root[data-theme="light"]{--bg:#f3f6fb;--panel:#ffffff;--panel2:#eef3fa;--panel3:#e3ebf7;--border:#d5e0f0;--border2:#e0e8f3;--border3:#bcd0ea;--border-hi:#8fb4e0;--text:#2b3a52;--bright:#111a2c;--muted:#3c4f6b;--dim:#51637f;--faint:#5b6f8c;--fainter:#7488a3;--accent:#0072b8;--accent2:#005c94;--bad:#c22a48;--warn:#8a6300;--ok:#178a52;}
+body,.card,.panel,.btn{transition:background-color .25s ease,border-color .25s ease,color .25s ease;}
+.themebtn{position:fixed;top:14px;right:14px;z-index:10000;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:1px;padding:8px 14px;border-radius:999px;border:1px solid var(--border3);background:var(--panel);color:var(--accent);cursor:pointer;}
+.themebtn:hover{border-color:var(--accent);}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);font-family:'Inter',sans-serif;color:var(--text);min-height:100vh;}
+.mono{font-family:'JetBrains Mono',monospace;}
+a{color:var(--accent);text-decoration:none;} a:hover{color:var(--accent2);}
+.wrap{max-width:900px;margin:0 auto;padding:24px 16px 60px;}
+.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:10px;}
+.brand{display:flex;align-items:center;gap:10px;}
+.brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);}
+.brand h1{font-size:19px;margin:0;color:var(--bright);letter-spacing:.5px;}
+.backLink{font-size:13px;color:var(--faint);}
+.lead{color:var(--muted);line-height:1.6;font-size:14px;margin:12px 0 20px;max-width:70ch;}
+.scorebar{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px;font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--dim);align-items:center;}
+.stat{padding:8px 14px;border:1px solid var(--border2);border-radius:10px;background:var(--panel);}
+.stat b{color:var(--bright);}
+.panel{border:1px solid var(--border);border-radius:14px;background:var(--panel);padding:22px;}
+.flowHost{background:#050810;border:1px solid var(--border2);border-radius:10px;padding:14px;margin-bottom:18px;}
+:root[data-theme="light"] .flowHost{background:var(--panel2);}
+.fshape{stroke-width:2;}
+.fstart{fill:var(--panel3);stroke:var(--accent2);}
+.fio{fill:var(--panel3);stroke:var(--accent2);}
+.fproc{fill:var(--panel2);stroke:var(--border-hi);}
+.fdec{fill:var(--panel3);stroke:var(--warn);}
+.ftext{font-family:'JetBrains Mono',monospace;font-size:12.5px;fill:var(--bright);}
+.fbold{font-weight:700;}
+.farrow{stroke:var(--dim);stroke-width:2;fill:none;}
+.flabel{font-family:'JetBrains Mono',monospace;font-size:11px;fill:var(--accent2);font-weight:700;}
+.promptLine{font-size:15px;font-weight:600;color:var(--bright);margin-bottom:14px;}
+.answerRow{display:flex;gap:10px;flex-wrap:wrap;}
+.ansInput{flex:1;min-width:180px;font-family:'JetBrains Mono',monospace;font-size:15px;padding:12px 14px;border-radius:9px;border:1px solid var(--border3);background:var(--bg);color:var(--bright);}
+.btn{padding:12px 18px;border-radius:10px;border:1px solid var(--border3);background:var(--panel2);color:var(--bright);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;cursor:pointer;}
+.btn:hover{border-color:var(--border-hi);background:var(--panel3);}
+.btn.primary{border-color:var(--accent);background:var(--accent);color:#031018;}
+.btn.primary:hover{background:var(--accent2);border-color:var(--accent2);}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:10px;font-size:13.5px;line-height:1.65;}
+.feedback.correct{background:rgba(79,214,138,.1);border:1px solid rgba(79,214,138,.3);}
+.feedback.wrong{background:rgba(255,92,122,.1);border:1px solid rgba(255,92,122,.3);}
+.feedback b{display:block;margin-bottom:6px;font-family:'JetBrains Mono',monospace;font-size:12px;}
+.controls{display:flex;justify-content:flex-end;margin-top:18px;}
+.field{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:1.5px;color:var(--dim);margin-bottom:8px;}
+input[type=text]{width:100%;font-family:'Inter',sans-serif;font-size:14.5px;padding:12px 14px;border-radius:9px;border:1px solid var(--border3);background:var(--bg);color:var(--bright);margin-bottom:16px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.err{font-size:12.5px;color:var(--bad);margin:-8px 0 14px;min-height:16px;}
+.sheetHead{text-align:center;margin-bottom:18px;}
+.sheetTitle{font-size:22px;font-weight:800;color:var(--bright);}
+.sheetSub{font-size:13px;color:var(--dim);margin-top:2px;}
+.sheetMeta{display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;font-size:14px;margin-bottom:20px;padding:14px 16px;background:var(--panel2);border:1px solid var(--border2);border-radius:10px;}
+.sheetTable{width:100%;border-collapse:collapse;font-size:13px;}
+.sheetTable th,.sheetTable td{border:1px solid var(--border2);padding:8px 10px;text-align:left;}
+.sheetTable th{background:var(--panel2);font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.5px;color:var(--dim);}
+.sheetFoot{margin-top:16px;font-size:12.5px;color:var(--faint);text-align:center;}
+@media print{
+  body *{visibility:hidden;}
+  #summarySheet, #summarySheet *{visibility:visible;}
+  #summarySheet{position:absolute;top:0;left:0;width:100%;padding:0;}
+  .noPrint{display:none !important;}
+}
+</style>
+</head>
+<body>
+<button id="themeToggle" class="themebtn noPrint" onclick="__toggleTheme()">LIGHT</button>
+<script>(function(){var K='course-theme',r=document.documentElement,b=document.getElementById('themeToggle');function lbl(){if(b)b.textContent=r.getAttribute('data-theme')==='light'?'◐ DARK':'◑ LIGHT';}window.__toggleTheme=function(){var t=r.getAttribute('data-theme')==='light'?'dark':'light';r.setAttribute('data-theme',t);try{localStorage.setItem(K,t);}catch(e){}lbl();};lbl();})();</script>
+<div class="wrap">
+  <div class="top noPrint">
+    <div class="brand"><span class="dot"></span><h1>FLOW TRACE</h1></div>
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+      <span class="mono" style="font-size:12.5px;color:var(--faint);">flowchart tracing · AP CSP · free play, no XP</span>
+      <a class="backLink mono" href="index.html">&larr; simulators</a>
+    </div>
+  </div>
+  <p class="lead noPrint">Read each flowchart the way it actually executes, then type exactly what it would display. You'll get 10 questions drawn at random from a pool of 15 — sequencing, selection, and iteration.</p>
+
+  <div id="quizPanel">
+    <div class="scorebar noPrint">
+      <div class="stat">PROBLEM <b id="idxOut">1</b>/<span id="totalOut">10</span></div>
+      <div class="stat">CORRECT <b id="correctOut" style="color:var(--ok);">0</b></div>
+    </div>
+    <div class="panel">
+      <div class="promptLine">What does this program display?</div>
+      <div class="flowHost" id="flowHost"></div>
+      <div class="answerRow">
+        <input class="ansInput mono" id="ansInput" type="text" placeholder="Type the output exactly as it would be displayed…" autocomplete="off">
+        <button class="btn primary" id="submitBtn" onclick="submitAnswer()">SUBMIT</button>
+        <button class="btn primary" id="nextBtn" onclick="nextProblem()" style="display:none;">NEXT →</button>
+      </div>
+      <div id="fbSlot"></div>
+    </div>
+  </div>
+
+  <div id="nameFormPanel" class="panel" style="display:none;">
+    <div class="promptLine">Nice work — you scored <span id="finalScoreOut" class="mono" style="color:var(--accent2);"></span>.</div>
+    <p class="lead" style="margin-top:0;">Enter your info to generate a summary sheet you can print or save as a PDF and submit to your teacher.</p>
+    <label class="field">YOUR NAME</label>
+    <input type="text" id="sName" placeholder="First and last name">
+    <label class="field">CLASS PERIOD</label>
+    <input type="text" id="sPeriod" placeholder="Class period">
+    <div class="err" id="nameErr"></div>
+    <button class="btn primary" onclick="generateSummary()">GENERATE SUMMARY SHEET</button>
+  </div>
+
+  <div id="summaryPanel" class="panel" style="display:none;">
+    <div id="summarySheet"></div>
+    <div class="controls noPrint" style="justify-content:space-between;">
+      <button class="btn" onclick="retryQuiz()">↻ TRY A NEW SET</button>
+      <button class="btn primary" onclick="printSummary()">PRINT / SAVE AS PDF</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+var POOL = [
+  // ---- SEQUENCE (Big Idea 3: sequencing) ----
+  {kind:'sequence', nodes:[{type:'io',text:'x = 5'},{type:'io',text:'y = 3'},{type:'process',text:'x = x + y'},{type:'io',text:'DISPLAY(x)'}],
+    answer:'8', explain:'x starts at 5 and y at 3. x = x + y sets x to 5 + 3 = 8, and that\u2019s what DISPLAY(x) shows.'},
+  {kind:'sequence', nodes:[{type:'io',text:'total = 0'},{type:'process',text:'total = total + 10'},{type:'process',text:'total = total + 5'},{type:'io',text:'DISPLAY(total)'}],
+    answer:'15', explain:'total starts at 0, gains 10 (→10), then gains 5 (→15). DISPLAY(total) shows 15.'},
+  {kind:'sequence', nodes:[{type:'io',text:'a = 4'},{type:'io',text:'b = 7'},{type:'process',text:'c = a * b'},{type:'io',text:'DISPLAY(c)'}],
+    answer:'28', explain:'c = a * b = 4 * 7 = 28.'},
+  {kind:'sequence', nodes:[{type:'io',text:'n = 12'},{type:'process',text:'n = n - 5'},{type:'process',text:'n = n * 2'},{type:'io',text:'DISPLAY(n)'}],
+    answer:'14', explain:'n starts at 12, subtract 5 → 7, then multiply by 2 → 14.'},
+  {kind:'sequence', nodes:[{type:'io',text:'s = "Hi"'},{type:'process',text:'s = s + " there"'},{type:'io',text:'DISPLAY(s)'}],
+    answer:'Hi there', explain:'String concatenation appends " there" onto "Hi", producing "Hi there".'},
+  // ---- BRANCH (Big Idea 3: selection) ----
+  {kind:'branch', pre:[{text:'x = 6'}], cond:'x MOD 2 = 0?', yes:{text:'DISPLAY("Even")'}, no:{text:'DISPLAY("Odd")'},
+    answer:'Even', explain:'6 MOD 2 = 0, so the condition is true and the Yes branch runs, displaying "Even".'},
+  {kind:'branch', pre:[{text:'score = 72'}], cond:'score >= 70?', yes:{text:'DISPLAY("Pass")'}, no:{text:'DISPLAY("Fail")'},
+    answer:'Pass', explain:'72 is greater than or equal to 70, so the Yes branch runs, displaying "Pass".'},
+  {kind:'branch', pre:[{text:'a = 5'},{text:'b = 9'}], cond:'a > b?', yes:{text:'DISPLAY(a)'}, no:{text:'DISPLAY(b)'},
+    answer:'9', explain:'a (5) is not greater than b (9), so the No branch runs, displaying b, which is 9.'},
+  {kind:'branch', pre:[{text:'temp = 28'}], cond:'temp > 30?', yes:{text:'DISPLAY("Hot")'}, no:{text:'DISPLAY("Not hot")'},
+    answer:'Not hot', explain:'28 is not greater than 30, so the No branch runs, displaying "Not hot".'},
+  {kind:'branch', pre:[{text:'n = -4'}], cond:'n < 0?', yes:{text:'DISPLAY("Negative")'}, no:{text:'DISPLAY("Non-negative")'},
+    answer:'Negative', explain:'-4 is less than 0, so the Yes branch runs, displaying "Negative".'},
+  // ---- LOOP (Big Idea 3: iteration) ----
+  {kind:'loop', pre:[{text:'total = 0'},{text:'i = 1'}], cond:'i <= 4?', body:[{text:'total = total + i'},{text:'i = i + 1'}], post:{text:'DISPLAY(total)'},
+    answer:'10', explain:'The loop adds i to total for i = 1, 2, 3, 4: 0+1+2+3+4 = 10. Once i reaches 5, the condition is false and the loop exits.'},
+  {kind:'loop', pre:[{text:'count = 0'},{text:'i = 1'}], cond:'i <= 5?', body:[{text:'IF i MOD 2=0: count=count+1'},{text:'i = i + 1'}], post:{text:'DISPLAY(count)'},
+    answer:'2', explain:'i runs 1 through 5. Only i = 2 and i = 4 are even, so count increases twice, ending at 2.'},
+  {kind:'loop', pre:[{text:'product = 1'},{text:'i = 1'}], cond:'i <= 4?', body:[{text:'product = product * i'},{text:'i = i + 1'}], post:{text:'DISPLAY(product)'},
+    answer:'24', explain:'product multiplies by i each pass: 1*1*2*3*4 = 24 — this loop computes 4 factorial.'},
+  {kind:'loop', pre:[{text:'total = 100'},{text:'i = 1'}], cond:'i <= 3?', body:[{text:'total = total - 10'},{text:'i = i + 1'}], post:{text:'DISPLAY(total)'},
+    answer:'70', explain:'The loop runs 3 times, subtracting 10 each time: 100 - 30 = 70.'},
+  {kind:'loop', pre:[{text:'word = ""'},{text:'i = 1'}], cond:'i <= 3?', body:[{text:'word = word + "a"'},{text:'i = i + 1'}], post:{text:'DISPLAY(word)'},
+    answer:'aaa', explain:'The loop appends "a" three times, building up the string "aaa".'}
+];
+
+var CW = 440, MAINX = 220, SIDE_OFF = 130, GAP = 34;
+
+function wrapLines(text, maxChars){
+  var words = String(text).split(' '), lines = [], cur = '';
+  words.forEach(function(w){
+    if((cur+' '+w).trim().length > maxChars && cur){ lines.push(cur); cur = w; }
+    else cur = (cur ? cur+' ' : '') + w;
+  });
+  if(cur) lines.push(cur);
+  return lines;
+}
+function textBlock(cx, cy, text, opts){
+  opts = opts || {};
+  var maxChars = opts.maxChars || 26, lh = opts.lineHeight || 16;
+  var lines = wrapLines(text, maxChars);
+  var startY = cy - ((lines.length-1)*lh)/2 + 5;
+  return lines.map(function(ln,i){
+    return '<text x="'+cx+'" y="'+(startY+i*lh)+'" text-anchor="middle" class="ftext'+(opts.bold?' fbold':'')+'">'+esc(ln)+'</text>';
+  }).join('');
+}
+function ovalShape(cx, topY, text){
+  var w=170,h=46,x=cx-w/2;
+  return {svg:'<rect x="'+x+'" y="'+topY+'" width="'+w+'" height="'+h+'" rx="'+(h/2)+'" class="fshape fstart"/>'+textBlock(cx,topY+h/2,text,{maxChars:20,bold:true}), bottom: topY+h};
+}
+function ioShape(cx, topY, text, w){
+  w = w||260; var h=48, x=cx-w/2, sk=16;
+  var pts=(x+sk)+','+topY+' '+(x+w)+','+topY+' '+(x+w-sk)+','+(topY+h)+' '+x+','+(topY+h);
+  return {svg:'<polygon points="'+pts+'" class="fshape fio"/>'+textBlock(cx,topY+h/2,text,{maxChars: w>200?30:18}), bottom: topY+h};
+}
+function processShape(cx, topY, text, w){
+  w=w||260; var h=48, x=cx-w/2;
+  return {svg:'<rect x="'+x+'" y="'+topY+'" width="'+w+'" height="'+h+'" rx="6" class="fshape fproc"/>'+textBlock(cx,topY+h/2,text,{maxChars: w>200?30:18}), bottom: topY+h};
+}
+function diamondShape(cx, topY, text){
+  var w=260,h=104,x=cx-w/2,y=topY;
+  var pts=cx+','+y+' '+(x+w)+','+(y+h/2)+' '+cx+','+(y+h)+' '+x+','+(y+h/2);
+  return {svg:'<polygon points="'+pts+'" class="fshape fdec"/>'+textBlock(cx,y+h/2,text,{maxChars:22}), bottom: topY+h, midY: y+h/2, leftX:x, rightX:x+w};
+}
+function vArrow(x,y1,y2){ return '<line x1="'+x+'" y1="'+y1+'" x2="'+x+'" y2="'+y2+'" class="farrow" marker-end="url(#arrowhead)"/>'; }
+function lArrow(pts, label, labelPos){
+  var d = 'M '+pts.map(function(p){return p[0]+' '+p[1];}).join(' L ');
+  var svg = '<path d="'+d+'" class="farrow" marker-end="url(#arrowhead)"/>';
+  if(label){ svg += '<text x="'+labelPos[0]+'" y="'+labelPos[1]+'" class="flabel">'+esc(label)+'</text>'; }
+  return svg;
+}
+function curveBack(x1,y1,x2,y2,label,labelPos,bulge){
+  var midx = Math.min(x1,x2)-(bulge||70);
+  var d = 'M '+x1+' '+y1+' C '+midx+' '+y1+', '+midx+' '+y2+', '+x2+' '+y2;
+  var svg = '<path d="'+d+'" class="farrow" fill="none" marker-end="url(#arrowhead)"/>';
+  if(label){ svg += '<text x="'+labelPos[0]+'" y="'+labelPos[1]+'" class="flabel">'+esc(label)+'</text>'; }
+  return svg;
+}
+
+function buildSequence(p){
+  var parts=[], y=10;
+  var s=ovalShape(MAINX,y,'START'); parts.push(s.svg); parts.push(vArrow(MAINX,s.bottom,s.bottom+GAP)); y=s.bottom+GAP;
+  p.nodes.forEach(function(n){
+    var shape = n.type==='process' ? processShape(MAINX,y,n.text) : ioShape(MAINX,y,n.text);
+    parts.push(shape.svg); parts.push(vArrow(MAINX,shape.bottom,shape.bottom+GAP)); y=shape.bottom+GAP;
+  });
+  var e=ovalShape(MAINX,y,'END'); parts.push(e.svg);
+  return {svg:parts.join(''), height:e.bottom+10};
+}
+function buildBranch(p){
+  var parts=[], y=10;
+  var s=ovalShape(MAINX,y,'START'); parts.push(s.svg); parts.push(vArrow(MAINX,s.bottom,s.bottom+GAP)); y=s.bottom+GAP;
+  p.pre.forEach(function(n){
+    var shape=ioShape(MAINX,y,n.text); parts.push(shape.svg); parts.push(vArrow(MAINX,shape.bottom,shape.bottom+GAP)); y=shape.bottom+GAP;
+  });
+  var dia=diamondShape(MAINX,y,p.cond); parts.push(dia.svg);
+  var boxTopY=dia.bottom+50;
+  var noCx=MAINX-SIDE_OFF, yesCx=MAINX+SIDE_OFF;
+  parts.push(lArrow([[dia.leftX,dia.midY],[noCx,dia.midY],[noCx,boxTopY]],'No',[(dia.leftX+noCx)/2-6,dia.midY-10]));
+  parts.push(lArrow([[dia.rightX,dia.midY],[yesCx,dia.midY],[yesCx,boxTopY]],'Yes',[(dia.rightX+yesCx)/2-8,dia.midY-10]));
+  var noShape=ioShape(noCx,boxTopY,p.no.text,170), yesShape=ioShape(yesCx,boxTopY,p.yes.text,170);
+  parts.push(noShape.svg); parts.push(yesShape.svg);
+  var endY=Math.max(noShape.bottom,yesShape.bottom)+50;
+  parts.push(lArrow([[noCx,noShape.bottom],[noCx,endY-15],[MAINX,endY]]));
+  parts.push(lArrow([[yesCx,yesShape.bottom],[yesCx,endY-15],[MAINX,endY]]));
+  var e=ovalShape(MAINX,endY,'END'); parts.push(e.svg);
+  return {svg:parts.join(''), height:e.bottom+10};
+}
+function buildLoop(p){
+  var parts=[], y=10;
+  var s=ovalShape(MAINX,y,'START'); parts.push(s.svg); parts.push(vArrow(MAINX,s.bottom,s.bottom+GAP)); y=s.bottom+GAP;
+  p.pre.forEach(function(n){
+    var shape=ioShape(MAINX,y,n.text); parts.push(shape.svg); parts.push(vArrow(MAINX,shape.bottom,shape.bottom+GAP)); y=shape.bottom+GAP;
+  });
+  var dia=diamondShape(MAINX,y,p.cond); parts.push(dia.svg);
+  var bodyCx=MAINX+SIDE_OFF, bodyTopY=dia.bottom+50;
+  parts.push(lArrow([[dia.rightX,dia.midY],[bodyCx,dia.midY],[bodyCx,bodyTopY]],'Yes',[(dia.rightX+bodyCx)/2-8,dia.midY-10]));
+  var by=bodyTopY, lastBottom=by;
+  p.body.forEach(function(n,i){
+    var shape=processShape(bodyCx,by,n.text,170); parts.push(shape.svg);
+    if(i<p.body.length-1) parts.push(vArrow(bodyCx,shape.bottom,shape.bottom+16));
+    lastBottom=shape.bottom; by=shape.bottom+16;
+  });
+  parts.push(curveBack(bodyCx-85,lastBottom-24,dia.rightX-30,dia.midY+24,'loop back',[bodyCx-150,(lastBottom+dia.midY)/2],15));
+  var postTopY=Math.max(dia.bottom,lastBottom)+50;
+  parts.push(lArrow([[MAINX,dia.bottom],[MAINX,postTopY]],'No',[MAINX+8,(dia.bottom+postTopY)/2]));
+  var postShape=ioShape(MAINX,postTopY,p.post.text); parts.push(postShape.svg);
+  parts.push(vArrow(MAINX,postShape.bottom,postShape.bottom+GAP));
+  var e=ovalShape(MAINX,postShape.bottom+GAP,'END'); parts.push(e.svg);
+  return {svg:parts.join(''), height:Math.max(e.bottom,lastBottom)+10};
+}
+function buildFlowchart(p){
+  var r = p.kind==='sequence' ? buildSequence(p) : (p.kind==='branch' ? buildBranch(p) : buildLoop(p));
+  return '<svg viewBox="0 0 '+CW+' '+r.height+'" width="100%" style="max-width:480px;display:block;margin:0 auto;">'
+    + '<defs><marker id="arrowhead" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--dim)"/></marker></defs>'
+    + r.svg + '</svg>';
+}
+
+function shuffleArr(a){ a=a.slice(); for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t;} return a; }
+
+var QUIZ=[], qi=0, answers=[], correctCount=0;
+
+function startQuiz(){
+  QUIZ = shuffleArr(POOL).slice(0,10);
+  qi=0; answers=new Array(QUIZ.length).fill(null); correctCount=0;
+  document.getElementById('quizPanel').style.display='';
+  document.getElementById('nameFormPanel').style.display='none';
+  document.getElementById('summaryPanel').style.display='none';
+  document.getElementById('totalOut').textContent = QUIZ.length;
+  renderProblem();
+}
+function renderProblem(){
+  var p = QUIZ[qi];
+  document.getElementById('idxOut').textContent = qi+1;
+  document.getElementById('correctOut').textContent = correctCount;
+  document.getElementById('flowHost').innerHTML = buildFlowchart(p);
+  var a = answers[qi];
+  var inp = document.getElementById('ansInput');
+  inp.value = a ? a.given : '';
+  inp.disabled = !!a;
+  document.getElementById('submitBtn').style.display = a ? 'none' : '';
+  document.getElementById('nextBtn').style.display = a ? '' : 'none';
+  document.getElementById('nextBtn').textContent = (qi===QUIZ.length-1) ? 'FINISH →' : 'NEXT →';
+  document.getElementById('fbSlot').innerHTML = a ? feedbackHtml(p,a) : '';
+  if(!a){ setTimeout(function(){ inp.focus(); }, 30); }
+}
+function norm(s){ return String(s||'').trim().toLowerCase().replace(/^["']+|["']+$/g,'').replace(/\s+/g,' '); }
+function submitAnswer(){
+  if(answers[qi]) return;
+  var val = document.getElementById('ansInput').value;
+  if(!val.trim()) return;
+  var p = QUIZ[qi];
+  var correct = norm(val)===norm(p.answer);
+  answers[qi] = {given: val.trim(), correct: correct};
+  if(correct) correctCount++;
+  renderProblem();
+}
+function nextProblem(){
+  if(!answers[qi]) return;
+  if(qi < QUIZ.length-1){ qi++; renderProblem(); } else { showSummaryForm(); }
+}
+function feedbackHtml(p,a){
+  var cls = a.correct ? 'correct' : 'wrong';
+  var headline = a.correct ? 'Correct — output is '+p.answer+'.' : 'Not quite — the actual output is '+p.answer+'.';
+  return '<div class="feedback '+cls+'"><b>'+esc(headline)+'</b>'+esc(p.explain)+'</div>';
+}
+function showSummaryForm(){
+  document.getElementById('quizPanel').style.display='none';
+  document.getElementById('nameFormPanel').style.display='';
+  document.getElementById('finalScoreOut').textContent = correctCount+' / '+QUIZ.length;
+}
+function generateSummary(){
+  var name = document.getElementById('sName').value.trim();
+  var period = document.getElementById('sPeriod').value.trim();
+  var err = document.getElementById('nameErr');
+  if(!name){ err.textContent = 'Enter your name.'; return; }
+  err.textContent = '';
+  var pct = Math.round(100*correctCount/QUIZ.length);
+  var date = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  var rows = QUIZ.map(function(p,i){ return {n:i+1, kind:p.kind, given:answers[i].given, ok:answers[i].correct, correct:p.answer}; });
+  var html = '<div class="sheetHead"><div class="sheetTitle">Flow Trace — Summary Sheet</div><div class="sheetSub">AP Computer Science Principles</div></div>'
+    + '<div class="sheetMeta"><div><b>Name:</b> '+esc(name)+'</div><div><b>Period:</b> '+esc(period||'—')+'</div>'
+    + '<div><b>Date:</b> '+date+'</div><div><b>Score:</b> '+correctCount+' / '+QUIZ.length+' ('+pct+'%)</div></div>'
+    + '<table class="sheetTable"><thead><tr><th>#</th><th>Type</th><th>Your Answer</th><th>Result</th><th>Correct Output</th></tr></thead><tbody>'
+    + rows.map(function(r){ return '<tr><td>'+r.n+'</td><td>'+esc(r.kind)+'</td><td>'+esc(r.given)+'</td><td>'+(r.ok?'\u2713 Correct':'\u2717 Incorrect')+'</td><td>'+esc(r.correct)+'</td></tr>'; }).join('')
+    + '</tbody></table><div class="sheetFoot">Submit this page to your teacher.</div>';
+  document.getElementById('summarySheet').innerHTML = html;
+  document.getElementById('nameFormPanel').style.display='none';
+  document.getElementById('summaryPanel').style.display='';
+}
+function printSummary(){ window.print(); }
+function retryQuiz(){ startQuiz(); }
+
+startQuiz();
+</script>
+
+<div class="mono noPrint" style="max-width:1120px;margin:32px auto 0;padding:0 16px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
+  <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:6px;opacity:.75;">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.4"/><path d="M8.6 12a3.4 3.4 0 1 1 1.15 2.55" stroke="currentColor" stroke-width="1.3" fill="none"/><path d="M14.1 12a3.4 3.4 0 1 1 1.15 2.55" stroke="currentColor" stroke-width="1.3" fill="none"/></svg>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.4"/><text x="12" y="16" text-anchor="middle" font-size="11" font-weight="700" fill="currentColor" font-family="sans-serif">BY</text></svg>
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1.4"/><text x="12" y="16" text-anchor="middle" font-size="10" font-weight="700" fill="currentColor" font-family="sans-serif">NC</text></svg>
+  </a>
+  <span style="font-size:13px;color:#7f9cb8;font-weight:500;">CC BY-NC 4.0 &mdash; free to share &amp; adapt with attribution, non-commercial only &middot; github.com/Web3Lion</span>
+</div>
+</body>
+</html>

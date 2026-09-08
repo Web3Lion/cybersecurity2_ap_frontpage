@@ -18,9 +18,22 @@ html,body{margin:0;height:100%;background:var(--bg);color:var(--text);font-famil
 .mono{font-family:'JetBrains Mono',monospace;}
 button{font-family:inherit;cursor:pointer;}
 #bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+#fxCanvas{position:absolute;inset:0;width:100%;height:100%;display:block;}
 #bgfx .scan{position:absolute;inset:0;background:repeating-linear-gradient(0deg, color-mix(in oklab, var(--accent) 10%, transparent) 0, color-mix(in oklab, var(--accent) 10%, transparent) 1px, transparent 2px, transparent 4px);opacity:.5;}
 #bgfx .glow{position:absolute;width:70vw;height:70vw;border-radius:50%;background:radial-gradient(circle, color-mix(in oklab, var(--accent) 22%, transparent) 0%, transparent 65%);top:-25vw;left:-15vw;filter:blur(10px);animation:drift 22s ease-in-out infinite alternate;}
 #bgfx .glow2{position:absolute;width:60vw;height:60vw;border-radius:50%;background:radial-gradient(circle, color-mix(in oklab, var(--accent2) 16%, transparent) 0%, transparent 65%);bottom:-20vw;right:-10vw;filter:blur(10px);animation:drift 26s ease-in-out infinite alternate-reverse;}
+
+/* ---- fx picker panel ---- */
+#fxPanel{position:fixed;left:16px;bottom:16px;z-index:6;font-family:'JetBrains Mono',monospace;}
+#fxToggle{width:40px;height:40px;border-radius:10px;background:var(--panel);border:1px solid var(--border2);color:var(--dim);display:flex;align-items:center;justify-content:center;font-size:17px;}
+#fxToggle:hover{border-color:var(--accent);color:var(--accent);}
+#fxBody{margin-top:8px;background:var(--panel);border:1px solid var(--border2);border-radius:12px;padding:14px;width:210px;display:none;flex-direction:column;gap:12px;box-shadow:0 10px 30px -10px rgba(0,0,0,.6);}
+#fxBody.open{display:flex;}
+.fxLbl{font-size:10px;color:var(--faint);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;display:block;}
+.fxThemeBtn{width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--border2);background:var(--bg);color:var(--muted);font-size:12px;text-align:left;margin-bottom:6px;display:block;}
+.fxThemeBtn:last-child{margin-bottom:0;}
+.fxThemeBtn.active{border-color:var(--accent);color:var(--bright);background:color-mix(in oklab, var(--accent) 12%, var(--bg));}
+#fxHue{width:100%;accent-color:var(--accent);}
 @keyframes drift{0%{transform:translate(0,0) scale(1);}100%{transform:translate(4vw,3vw) scale(1.08);}}
 @keyframes spin{to{transform:rotate(360deg);}}
 @keyframes blink{0%,49%{opacity:1;}50%,100%{opacity:.15;}}
@@ -73,6 +86,9 @@ button{font-family:inherit;cursor:pointer;}
 .row .bar i{display:block;height:100%;background:linear-gradient(90deg, var(--accent), var(--accent2));border-radius:6px;}
 .row .xpnum{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--bright);font-size:clamp(13px,1.4vw,17px);min-width:52px;text-align:right;}
 .rowUp{animation:flashRow 1.4s ease;}
+.row,.pod{will-change:transform;}
+.rankGain{box-shadow:0 0 0 1px var(--accent) inset;}
+.rankLoss{opacity:.88;}
 
 #empty{margin:auto;text-align:center;color:var(--dim);font-size:16px;}
 #footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;font-size:clamp(10px,1vw,12px);color:var(--faint);font-family:'JetBrains Mono',monospace;}
@@ -80,7 +96,24 @@ button{font-family:inherit;cursor:pointer;}
 </style>
 </head>
 <body>
-<div id="bgfx"><div class="scan"></div><div class="glow"></div><div class="glow2"></div></div>
+<div id="bgfx"><canvas id="fxCanvas"></canvas><div class="scan"></div><div class="glow"></div><div class="glow2"></div></div>
+<div id="fxPanel">
+  <button id="fxToggle" onclick="FX.togglePanel()">✦</button>
+  <div id="fxBody">
+    <div>
+      <span class="fxLbl">Background</span>
+      <button class="fxThemeBtn" data-theme="off" onclick="FX.setTheme('off')">Off</button>
+      <button class="fxThemeBtn" data-theme="circuit" onclick="FX.setTheme('circuit')">Circuit Pulse</button>
+      <button class="fxThemeBtn" data-theme="matrix-code" onclick="FX.setTheme('matrix-code')">Matrix — Code Rain</button>
+      <button class="fxThemeBtn" data-theme="matrix-glyph" onclick="FX.setTheme('matrix-glyph')">Matrix — Alien Glyphs</button>
+      <button class="fxThemeBtn" data-theme="aurora" onclick="FX.setTheme('aurora')">Data Aurora</button>
+    </div>
+    <div>
+      <span class="fxLbl">Color</span>
+      <input type="range" id="fxHue" min="0" max="360" value="195" oninput="FX.setHue(this.value)">
+    </div>
+  </div>
+</div>
 <div id="app">
 
   <div id="gate" class="gateWrap" style="display:none;">
@@ -131,6 +164,156 @@ button{font-family:inherit;cursor:pointer;}
 <script src="supabase-config.js"></script>
 <script src="auth.js"></script>
 <script>
+var FX = (function(){
+  var canvas, ctx, raf = null, w = 0, h = 0, dpr = 1;
+  var theme = localStorage.getItem("board-fx-theme") || "circuit";
+  var hue = parseInt(localStorage.getItem("board-fx-hue") || "195", 10);
+  var nodes = [], pulses = [], cols = [], glyphSet = "0123456789";
+  var alienSet = "ᚠᚢᚦᚨᚱᚲᚷᚹᚺᚾᛁᛃᛇᛈᛉᛊᛏᛒᛖᛗᛚᛜᛞᛟ⟁⟐⟠⌬⏣";
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth; h = window.innerHeight;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    canvas.style.width = w + "px"; canvas.style.height = h + "px";
+    ctx.setTransform(dpr,0,0,dpr,0,0);
+    buildCircuit(); buildCols();
+  }
+  function buildCircuit(){
+    nodes = [];
+    var count = Math.max(18, Math.floor((w*h)/38000));
+    for (var i=0;i<count;i++){
+      nodes.push({x:Math.random()*w, y:Math.random()*h});
+    }
+    // connect each node to its 2 nearest neighbors
+    nodes.forEach(function(n){
+      var d = nodes.map(function(m){ return {m:m, dist:(m.x-n.x)*(m.x-n.x)+(m.y-n.y)*(m.y-n.y)}; })
+        .filter(function(o){ return o.m!==n; }).sort(function(a,b){ return a.dist-b.dist; }).slice(0,2);
+      n.links = d.map(function(o){ return o.m; });
+    });
+    pulses = [];
+    for (var j=0;j<Math.max(6,count/4);j++) spawnPulse();
+  }
+  function spawnPulse(){
+    if (!nodes.length) return;
+    var a = nodes[Math.floor(Math.random()*nodes.length)];
+    if (!a.links || !a.links.length) return;
+    var b = a.links[Math.floor(Math.random()*a.links.length)];
+    pulses.push({a:a, b:b, t:0, speed:0.006+Math.random()*0.01});
+  }
+  var MATRIX_HUES = {green:120, red:355, blue:215};
+  function pickColorMode(){
+    var modes = ["green","red","blue","rainbow"];
+    return modes[Math.floor(Math.random()*modes.length)];
+  }
+  function buildCols(){
+    var size = 20;
+    var n = Math.ceil(w/size);
+    cols = [];
+    for (var i=0;i<n;i++){
+      cols.push({x:i*size, y:Math.random()*-h, speed:(2+Math.random()*3)*0.75, len:8+Math.floor(Math.random()*14), colorMode:pickColorMode()});
+    }
+  }
+  function drawCircuit(){
+    ctx.fillStyle = "rgba(10,14,20,0.35)"; ctx.fillRect(0,0,w,h);
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "hsla("+hue+",60%,55%,0.12)";
+    nodes.forEach(function(n){ (n.links||[]).forEach(function(m){
+      ctx.beginPath(); ctx.moveTo(n.x,n.y); ctx.lineTo(m.x,m.y); ctx.stroke();
+    }); });
+    nodes.forEach(function(n){
+      ctx.beginPath(); ctx.arc(n.x,n.y,2,0,Math.PI*2);
+      ctx.fillStyle = "hsla("+hue+",70%,60%,0.35)"; ctx.fill();
+    });
+    if (Math.random()<0.04) spawnPulse();
+    pulses.forEach(function(p){
+      p.t += p.speed;
+      var x = p.a.x + (p.b.x-p.a.x)*p.t, y = p.a.y + (p.b.y-p.a.y)*p.t;
+      var grad = ctx.createRadialGradient(x,y,0,x,y,10);
+      grad.addColorStop(0, "hsla("+hue+",95%,70%,0.9)");
+      grad.addColorStop(1, "hsla("+hue+",95%,70%,0)");
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(x,y,10,0,Math.PI*2); ctx.fill();
+    });
+    pulses = pulses.filter(function(p){ return p.t < 1; });
+  }
+  var frameCount = 0;
+  function drawMatrix(set){
+    ctx.fillStyle = "rgba(10,14,20,0.13)"; ctx.fillRect(0,0,w,h);
+    ctx.font = "16px monospace"; ctx.textAlign="center";
+    frameCount++;
+    cols.forEach(function(c){
+      if (!c.chars) c.chars = [];
+      for (var i=0;i<c.len;i++){
+        var cy = c.y - i*20;
+        if (cy < -20 || cy > h+20) continue;
+        var t = i/c.len;
+        if (c.chars[i] == null || frameCount % 16 === 0){
+          c.chars[i] = set[Math.floor(Math.random()*set.length)];
+        }
+        var ch = c.chars[i];
+        if (i===0) ctx.fillStyle = "hsla("+hue+",30%,92%,0.95)";
+        else if (c.colorMode === "rainbow") ctx.fillStyle = "hsla("+((t*300 + frameCount*2)%360)+",90%,60%,"+(0.85-t*0.8)+")";
+        else ctx.fillStyle = "hsla("+MATRIX_HUES[c.colorMode]+",90%,"+(60-t*25)+"%,"+(0.85-t*0.8)+")";
+        ctx.fillText(ch, c.x+10, cy);
+      }
+      c.y += c.speed;
+      if (c.y - c.len*20 > h) { c.y = Math.random()*-200; c.speed = (2+Math.random()*3)*0.75; c.len = 8+Math.floor(Math.random()*14); c.chars = []; c.colorMode = pickColorMode(); }
+    });
+  }
+  var auroraT = 0;
+  function drawAurora(){
+    ctx.fillStyle = "rgba(10,14,20,0.10)"; ctx.fillRect(0,0,w,h);
+    auroraT += 0.006;
+    ctx.globalCompositeOperation = "lighter";
+    for (var i=0;i<3;i++){
+      var cx = w*(0.2+0.3*i) + Math.sin(auroraT*1.3+i)*w*0.15;
+      var cy = h*0.5 + Math.cos(auroraT*0.9+i*2)*h*0.35;
+      var r = Math.max(w,h)*0.32;
+      var grad = ctx.createRadialGradient(cx,cy,0,cx,cy,r);
+      grad.addColorStop(0, "hsla("+(hue+i*35)+",90%,60%,0.16)");
+      grad.addColorStop(1, "hsla("+(hue+i*35)+",90%,60%,0)");
+      ctx.fillStyle = grad;
+      ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fill();
+    }
+    ctx.globalCompositeOperation = "source-over";
+  }
+  function loop(){
+    if (theme==="circuit") drawCircuit();
+    else if (theme==="matrix-code") drawMatrix(glyphSet);
+    else if (theme==="matrix-glyph") drawMatrix(alienSet);
+    else if (theme==="aurora") drawAurora();
+    raf = requestAnimationFrame(loop);
+  }
+  function paintActive(){
+    document.querySelectorAll(".fxThemeBtn").forEach(function(b){
+      b.classList.toggle("active", b.getAttribute("data-theme")===theme);
+    });
+  }
+  function setTheme(t){
+    theme = t; localStorage.setItem("board-fx-theme", t);
+    paintActive();
+    if (ctx) ctx.clearRect(0,0,w,h);
+    if (raf) cancelAnimationFrame(raf);
+    if (t !== "off") loop();
+  }
+  function setHue(v){ hue = parseInt(v,10); localStorage.setItem("board-fx-hue", v); }
+  function togglePanel(){ document.getElementById("fxBody").classList.toggle("open"); }
+  function init(){
+    canvas = document.getElementById("fxCanvas"); ctx = canvas.getContext("2d");
+    document.getElementById("fxHue").value = hue;
+    window.addEventListener("resize", resize);
+    document.addEventListener("visibilitychange", function(){
+      if (document.hidden){ if (raf) cancelAnimationFrame(raf); }
+      else if (theme!=="off"){ loop(); }
+    });
+    resize();
+    paintActive();
+    if (theme !== "off") loop();
+  }
+  return { init:init, setTheme:setTheme, setHue:setHue, togglePanel:togglePanel };
+})();
+FX.init();
+
 var THEMES = {
   cyber1: { accent:"#00b3ff", accent2:"#7dd8ff", label:"Cybersecurity 1", tag:"security operations center" },
   cyber2: { accent:"#39ff88", accent2:"#7dffb3", label:"AP Cybersecurity 2", tag:"advanced threat board" },
@@ -143,7 +326,7 @@ var AUTH = window.CTF_AUTH;
 async function rpc(fn,args){ return AUTH.rpc(fn, args||{}); }
 var qs = new URLSearchParams(location.search);
 var courseParam = qs.get("course");
-var CLASSES = [], CUR = null, PREV = {};
+var CLASSES = [], CUR = null, PREV = {}, PREV_POS = {};
 var timer = null;
 
 function applyTheme(course){
@@ -236,11 +419,17 @@ function renderBoard(data){
   el("podium").style.display = "grid";
   el("listWrap").style.display = "flex";
 
+  // FLIP setup: capture current on-screen positions before re-render
+  var oldRects = {};
+  document.querySelectorAll('#podium [data-handle], #listWrap [data-handle]').forEach(function(elm){
+    oldRects[elm.getAttribute('data-handle')] = elm.getBoundingClientRect();
+  });
+
   var top3 = data.slice(0,3), rest = data.slice(3);
   var maxXp = data[0].xp || 1;
 
   el("podium").innerHTML = top3.map(function(p, i){
-    return '<div class="pod" id="pod' + (i+1) + '">' +
+    return '<div class="pod" id="pod' + (i+1) + '" data-handle="' + esc(p.handle) + '" data-pos="' + p.pos + '">' +
       '<div class="medal">' + MEDALS[i] + '</div>' +
       '<div class="rank">RANK ' + p.pos + '</div>' +
       '<div class="handle">' + esc(p.handle) + '</div>' +
@@ -254,7 +443,7 @@ function renderBoard(data){
   el("listWrap").innerHTML = rest.map(function(p){
     var pct = Math.max(4, Math.round((p.xp / maxXp) * 100));
     var isUp = PREV[p.handle] != null && p.xp > PREV[p.handle];
-    return '<div class="row' + (isUp ? ' rowUp' : '') + '">' +
+    return '<div class="row' + (isUp ? ' rowUp' : '') + '" data-handle="' + esc(p.handle) + '" data-pos="' + p.pos + '">' +
       '<div class="rk">#' + p.pos + '</div>' +
       '<div class="hd">' + esc(p.handle) + '</div>' +
       '<div class="streak">' + (p.streak_count > 1 ? '🔥 ' + p.streak_count : '') + '</div>' +
@@ -263,7 +452,35 @@ function renderBoard(data){
     '</div>';
   }).join("");
 
-  data.forEach(function(p){ PREV[p.handle] = p.xp; });
+  // FLIP playback: rank-up rows/tiles grow and rise, rank-down shrink and settle
+  requestAnimationFrame(function(){
+    document.querySelectorAll('#podium [data-handle], #listWrap [data-handle]').forEach(function(elm){
+      var handle = elm.getAttribute('data-handle');
+      var old = oldRects[handle];
+      if (!old) return;
+      var newRect = elm.getBoundingClientRect();
+      var deltaY = old.top - newRect.top;
+      var oldPos = PREV_POS[handle], newPos = parseInt(elm.getAttribute('data-pos'), 10);
+      var scale = 1;
+      if (oldPos != null && newPos !== oldPos) scale = newPos < oldPos ? 1.16 : 0.87;
+      if (Math.abs(deltaY) < 1 && scale === 1) return;
+      elm.style.transition = 'none';
+      elm.style.zIndex = scale > 1 ? '5' : '1';
+      elm.style.transformOrigin = 'center';
+      elm.style.transform = 'translateY(' + deltaY + 'px) scale(' + scale + ')';
+      elm.getBoundingClientRect();
+      requestAnimationFrame(function(){
+        elm.style.transition = 'transform .6s cubic-bezier(.22,.9,.28,1)';
+        elm.style.transform = 'translateY(0) scale(1)';
+      });
+      elm.addEventListener('transitionend', function te(){
+        elm.style.transition = ''; elm.style.transform = ''; elm.style.zIndex = '';
+        elm.removeEventListener('transitionend', te);
+      });
+    });
+  });
+
+  data.forEach(function(p){ PREV[p.handle] = p.xp; PREV_POS[p.handle] = p.pos; });
 }
 
 (async function(){
