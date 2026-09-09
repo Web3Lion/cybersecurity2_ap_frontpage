@@ -6287,6 +6287,142 @@ window.COURSE_CONFIG.apcsp.ctf = {
         flagHash: "e7f0fa54d28539fa670912d186744701b325cef6d8270fc58aad66edbb9b1b85" }
     ] },
 
+  { id: "ap-m2c", module: 2, title: "Data Types & Typecasting", category: "Python Programming",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Data types. Converting a value from one data type to another, like turning the string \"5\" into the integer 5, is called ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "You're changing the type, not the value.",
+        flagHash: "ecbc5b59eed8b3015e5feba8d1302931fc95c6e1aa46f5b413f4bff31d0ec41a" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Type errors. In Python, running \"5\" + 3 without typecasting either value raises what kind of error, because a string and an integer can't be combined that way?\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "Two mismatched data types.",
+        flagHash: "1b7d7dd330a50d837c718494e30c904e33ef084f4a47b0104f5a24e7cbefa466" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Tracing typecasting & concatenation. Trace this code:\nx \u2190 str(5) + str(3)\nWhat is the value of x?\n\nSubmit as flag{value}.",
+        hint: "str() converts each number to text first, so + joins them as characters instead of adding them.",
+        flagHash: "2858dcd1057d3eae7f7d5f782167e24b61153c01551450a628cee722509f6529" }
+    ] },
+
+  { id: "ap-m2d", module: 2, title: "Nested Conditionals", category: "Python Programming",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Boolean logic. Which Boolean operator requires BOTH conditions to be true for the whole expression to be true?\n\nSubmit as flag{word} (lowercase).",
+        hint: "Both sides must hold.",
+        flagHash: "6201111b83a0cb5b0922cb37cc442b9a40e24e3b1ce100a4bb204f4c63fd2ac0" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Tracing conditionals. Trace this code with score \u2190 85:\nIF score \u2265 90:\n  grade \u2190 \"A\"\nELSE IF score \u2265 80:\n  grade \u2190 \"B\"\nELSE:\n  grade \u2190 \"C\"\nWhat is the value of grade?\n\nSubmit as flag{letter} (lowercase).",
+        hint: "85 fails the first check but passes the second.",
+        flagHash: "3e23e8160039594a33894f6564e1b1348bbd7a0088d42c4acb73eeaed59c009d" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Tracing nested conditionals. Trace this code with x \u2190 5:\nIF x > 0:\n  IF x > 10:\n    result \u2190 \"big\"\n  ELSE:\n    result \u2190 \"small\"\nELSE:\n  result \u2190 \"negative\"\nWhat is the value of result?\n\nSubmit as flag{word} (lowercase).",
+        hint: "x is positive, so you're inside the outer IF — now check the inner condition.",
+        flagHash: "81db8ebbbbc69c6c6ad4a6aa92b76e0c08af547da236b9e2c9dbe1d8285a8130" }
+    ] },
+
+  { id: "ap-m2e", module: 2, title: "Iteration: For, While & Nested Loops", category: "Python Programming",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Iteration structures. A loop that repeats a fixed, known number of times (like REPEAT 5 TIMES) is a ___ loop.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The count is set in advance.",
+        flagHash: "10c22bcf4c768b515be4e94bcafc71bf3e8fb5f70b2584bcc8c7533217f2e7f9" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Iteration structures. A loop that keeps repeating AS LONG AS a condition stays true, checked before every pass, is a ___ loop.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The condition is checked first, every time, and the loop may run zero times.",
+        flagHash: "07a8750738828ffd36a9bbfc198cf5d3bfd93e9f86b0e16e5aedeef8426804cf" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Tracing nested loops. Trace this code:\nFOR i \u2190 0 TO 1:\n  FOR j \u2190 0 TO 2:\n    PRINT(i, j)\nHow many total lines does this print?\n\nSubmit as flag{number}.",
+        hint: "The outer loop runs 2 times; each time, the inner loop runs 3 times.",
+        flagHash: "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683" }
+    ] },
+
+  { id: "ap-m2f", module: 2, title: "Strings", category: "Python Programming",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Strings. The position number used to access a single character within a string is its ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Same term used for accessing one element of a list.",
+        flagHash: "1bc04b5291c26a46d918139138b992d2de976d6851d0893b0476b85bfbdfc6e6" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — String indexing. Given the string s \u2190 \"COMPUTER\", indexing starts at 0. What is s[2]?\n\nSubmit as flag{letter} (lowercase).",
+        hint: "C is index 0, O is index 1, M is index 2.",
+        flagHash: "62c66a7a5dd70c3146618063c344e531e6d4b59e379808443ce962b3abd63c5a" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — String length. What is the length of the string \"COMPUTER\"?\n\nSubmit as flag{number}.",
+        hint: "Count every character, including none that repeat.",
+        flagHash: "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3" }
+    ] },
+
+  { id: "ap-m2g", module: 2, title: "Lists & Index Values", category: "Python Programming",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Data abstraction. The position number of an element within a list, starting at 0, is its ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The first element is at position 0.",
+        flagHash: "1bc04b5291c26a46d918139138b992d2de976d6851d0893b0476b85bfbdfc6e6" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Finding an index. Given the list [\"red\", \"green\", \"blue\", \"yellow\"], what is the index of \"blue\"?\n\nSubmit as flag{number}.",
+        hint: "Count positions starting from 0: red is 0, green is 1...",
+        flagHash: "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Boundary errors. A list has 5 elements, so its valid indices are 0 through 4. Trying to access index 5 causes what kind of error?\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "The index is one past the last valid position — out of bounds.",
+        flagHash: "b09dbca537aa6104c4f3bebd98750d1f67da1f336b91b41c267338a5661e3f43" }
+    ] },
+
+  { id: "ap-m2h", module: 2, title: "Processing Lists (Traversals)", category: "Python Programming",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Processing lists. Visiting every element of a list, one at a time, in order, is called a ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "A FOR EACH loop over a list is doing this.",
+        flagHash: "a570734280136ec087b83781671f6c002f071bc8e7a8b2a515ed1a964eb3ab9f" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Tracing a traversal. Trace this code:\ntotal \u2190 0\nFOR EACH num IN [3, 6, 9]:\n  total \u2190 total + num\nWhat is the final value of total?\n\nSubmit as flag{number}.",
+        hint: "Add each list element to total, one at a time: 3, then 6, then 9.",
+        flagHash: "4ec9599fc203d176a301536c2e091a19bc852759b255bd6818810a42c5fed14a" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Searching within a traversal. Given the list [10, 20, 30, 40], what is the index of the FIRST value greater than 25?\n\nSubmit as flag{number}.",
+        hint: "Walk the list from index 0: 10 (no), 20 (no), 30 (yes) — that's the index you want.",
+        flagHash: "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35" }
+    ] },
+
+  { id: "ap-m2i", module: 2, title: "Functions & Parameters", category: "Python Programming",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Procedures. A value passed into a procedure so it can work with different inputs each time it's called is a ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Goes inside the parentheses when you define the procedure.",
+        flagHash: "6390361dfdff141a9223d632accf61242133a92d83f2a71be7233bb1cdbacca2" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Procedures. The value a procedure sends back to the code that called it is its ___.\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "What RETURN produces.",
+        flagHash: "bc638e540984290c4dc11de8d00d8176bcf6cc189c61f10c7ab964b6eee73f34" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Tracing function calls. Trace this code:\nPROCEDURE square(n):\n  RETURN n * n\nresult \u2190 square(4) + square(2)\nWhat is the value of result?\n\nSubmit as flag{number}.",
+        hint: "square(4) is 16, square(2) is 4 — add them.",
+        flagHash: "f5ca38f748a1d6eaf726b8a42fb575c3c71f1864a8143301782de13da2d9202b" }
+    ] },
+
+  { id: "ap-m2j", module: 2, title: "Syntax, Runtime & Logic Errors", category: "Python Programming",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Program errors. This code is missing a colon:\nFOR i IN range(5)\n  PRINT(i)\nThe program won't even start running because of this. What TYPE of error is this?\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "Broken grammar the language can't parse at all — caught before the program ever runs.",
+        flagHash: "bf19dfc472ae203ab6023f4e58dec48dcb24dfe188031ffc4fdfb4ad7b19a984" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Program errors. This code is syntactically correct and starts running fine, but crashes partway through when it executes divide(10, 0). What TYPE of error is this?\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "The program runs correctly until this specific operation is attempted — that timing is the giveaway.",
+        flagHash: "a38a797e13e5eeb0b722b165be482ab847e50f19213403d3c573cf9ee917004c" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Program errors. This code runs from start to finish with no crash, but a student meant to write average \u2190 total / count and instead wrote average \u2190 total * count, so every average printed is wrong. What TYPE of error is this?\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "It runs fine and never crashes — the program just doesn't do what it was supposed to do.",
+        flagHash: "78d855a26780fa5de753eb8b9a44558076334fdfb5643f89711d7ce1afde3cca" }
+    ] },
+
+  { id: "ap-m2-errortypes", module: 2, title: "Match the Error Type", category: "Python Programming", type: "match", points: 150,
+    intro: "Objective — Program errors. Match each situation to the type of error it is. Tap a situation, then tap its error type.",
+    pairs: [
+      { left: "Missing a colon after FOR i IN range(5)", right: "Syntax Error" },
+      { left: "Program crashes accessing list[10] on a 5-element list", right: "Runtime Error" },
+      { left: "Program runs fine but always prints the wrong total", right: "Logic Error" }
+    ] },
+
   { id: "ap-m2-pieces", module: 2, title: "Match the Python Piece", category: "Python Programming", type: "match", points: 150,
     intro: "Objective — Program structure. Match each line of Python to what it does. Tap the code, then tap its role.",
     pairs: [
@@ -6416,6 +6552,79 @@ window.COURSE_CONFIG.apcsp.ctf = {
     bias: ["binary","bit","byte","pixel","rgb","lossy","lossless","overflow","sampling","analog","digital"],
     hardMode: "speedmatch" },
 
+  { id: "ap-m3c", module: 3, title: "Creative Commons & Intellectual Property", category: "Digital Media",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Legal & ethical concerns. The legal protection automatically giving a creator control over their original work is called ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Automatically granted the moment you create something original.",
+        flagHash: "c2fca2aa3a976ccd7b980318e0416b0de4120f989284cb7d5e93672622407bbc" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Open licensing. A set of licenses that let creators specify exactly how others may reuse their copyrighted work (attribution, noncommercial, share-alike, etc.) is called ___ ___.\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "Two words, both capitalized in the reading — the license family this unit studies by name.",
+        flagHash: "d37736c48f4f76f0a15eb3c630bd196cc1b058270500fda618fbfcbda6d70404" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Legal & ethical concerns. Using someone's copyrighted image or media without permission or a valid license is called copyright ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Violating someone's copyright.",
+        flagHash: "6176b0aaf1a76ba74f2f56d34f7b628861dd5e83af8b840bd221e1c2dbe6ab74" }
+    ] },
+
+  { id: "ap-m3d", module: 3, title: "Unicode vs. ASCII", category: "Digital Media",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Character encoding. The character encoding standard broad enough to represent virtually every writing system in the world is called ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The modern, universal standard — replaced the older, narrower one.",
+        flagHash: "2fcf76a4c3c75b1fb5288d83d62dd114dc556d16fba206ab35d38bfe294a2857" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Character encoding. The older, more limited 7-bit character encoding standard, covering mainly English letters, numbers, and symbols, is called ___.\n\nSubmit as flag{abbreviation} (lowercase).",
+        hint: "The narrower, older 7-bit standard — an acronym.",
+        flagHash: "c543ece81605c7d202121c62080a0db4020fc2c75bfac35d101d7f3e93c93949" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Bit patterns & encoding limits. Since this older standard uses 7 bits per character, how many unique characters can it represent in total?\n\nSubmit as flag{number}.",
+        hint: "2 raised to the power of 7.",
+        flagHash: "2747b7c718564ba5f066f0523b03e17f6a496b06851333d2d59ab6d863225848" }
+    ] },
+
+  { id: "ap-m3e", module: 3, title: "Floating Point Numbers", category: "Digital Media",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Representing numbers. Numbers with a fractional or decimal part, represented in binary using a set number of bits, are called ___ point numbers.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The decimal point can 'float' to different positions depending on the number's size.",
+        flagHash: "f354e0229976f2251b0f37534999f0ecf5b25ebbfd0194f2f2395ed6bd075b24" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Limits of representation. Because only a fixed number of bits are available, a floating point number is sometimes stored as the closest value the format CAN represent, not the exact value. This small loss of precision is called a ___ ___.\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "The stored value gets 'rounded' to the nearest representable one.",
+        flagHash: "44f98dc3dbbcf910e7aed46be0050da71411e35d071eaefdda0af168a2d7de80" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Why floating point exists. Using the SAME fixed number of bits, floating point representation trades perfect precision for the ability to represent both very large and very tiny numbers — in other words, it maximizes ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "How far the representable values stretch, from smallest to largest.",
+        flagHash: "2269c0be009b610cfdbb8cfe9253ad37cf95062fb3f5a7560268ff259ea9f087" }
+    ] },
+
+  { id: "ap-m3f", module: 3, title: "Discrete vs. Continuous Data", category: "Digital Media", type: "match", points: 150,
+    intro: "Objective — Data representation. Match each kind of data to its category. Tap the example, then tap its category.",
+    pairs: [
+      { left: "Number of students in a classroom", right: "Discrete" },
+      { left: "Outdoor temperature over a day", right: "Continuous" },
+      { left: "A count of pixels in an image", right: "Discrete" },
+      { left: "The exact pitch of a musical note", right: "Continuous" }
+    ] },
+
+  { id: "ap-m3g", module: 3, title: "Digitizing Audio", category: "Digital Media",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Digitization. Measuring an analog sound wave's amplitude at fixed time intervals, to turn it into digital data, is called ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Measuring at set intervals.",
+        flagHash: "52630e4131f9862ea34c8ded9741fae2176c56c55c74827b2bd30cd1ef9eb37b" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Digitization. The number of samples taken per second when digitizing audio is called the sample ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Measured in samples per second.",
+        flagHash: "c549779d79e5c8e9c9a6b6da5f1c5e21075eb9319852f858acb227ee855e4ef5" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Trade-offs in digitization. If the sample rate is doubled while the bit depth and length of a recording stay the same, what happens to the resulting file size?\n\nSubmit as flag{word} (lowercase) — e.g. doubles, halves, or stays the same.",
+        hint: "Twice as many samples are captured every second.",
+        flagHash: "117079a22e1ed790d17d349adcd1082c40f4f9f6406f88c33d6100318aa22c80" }
+    ] },
+
   /* MODULE 4 — Data Science ───────────────────────────────────────────────── */
   { id: "ap-m4a", module: 4, title: "Working with Data", category: "Data Science",
     levels: [
@@ -6480,6 +6689,86 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m4-vocab", module: 4, title: "Vocabulary Recall", category: "Vocabulary", type: "vocab",
     bias: ["data","metadata","dataset","visualization","correlation","pattern","information","bias","record"],
     hardMode: "blitz" },
+
+  { id: "ap-m4c", module: 4, title: "Data Persistence & Breaches", category: "Data Science",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Storing data. Data that continues to exist in storage even after the program or device that created it is closed is called ___ data.\n\nSubmit as flag{word} (lowercase).",
+        hint: "It 'persists' after the program ends.",
+        flagHash: "75b07bb3ffb3b8ad63e79b983fbef8fd0ee8e7292144b4e7d3b57bd682074087" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Data security. Unauthorized access to sensitive stored data is called a data ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Companies send you a notice when this happens to their servers.",
+        flagHash: "2e02fd39b865c1f21791c46d1f651a636dbb10a60501d49c75ca5a821cdca293" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Privacy risk. Collecting far more personal data than a service actually needs to function — which increases the damage if that data is ever breached — is called data ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Gathering more than necessary — the opposite of data minimization.",
+        flagHash: "35e238b516ac3226f6dce875a3bbe2f3db1f7f79142fabf96d77d6f0589dfbd7" }
+    ] },
+
+  { id: "ap-m4d", module: 4, title: "Unstructured Data & Screenscraping", category: "Data Science",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Data organization. Data that doesn't fit neatly into rows and columns, like free-form text, photos, or video, is called ___ data.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The opposite of a clean spreadsheet.",
+        flagHash: "5d660f58c55044ba75373b9d433488d5fb0f1519663b2ed6eb2628e247c7ebca" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Collecting data. Automatically pulling data straight off a website's visual display, rather than through an official API, is called ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "'Scraping' data off the screen.",
+        flagHash: "39e2426d485561b2a02b341f5d80dd9fa188647dc7c9e6758911827a028a0ab7" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Privacy vs. utility. Making a dataset more useful for analysis often means collecting more personal detail about each person in it — which increases the risk to individual ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The thing that goes down as usefulness goes up.",
+        flagHash: "a4cc6bc01a927e2a78fd3bec51e865ac0d85e4daab6f988d5d33d056e125b1c3" }
+    ] },
+
+  { id: "ap-m4e", module: 4, title: "Anomaly Detection", category: "Data Science",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Data analysis. A data point that differs significantly from the rest of a dataset is called an ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "It stands out from the pattern.",
+        flagHash: "2aed12b734be9cf4a09a1f9f0dd96b7245af53861591373fcc414496094a9203" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Data analysis. Automatically flagging unusual patterns in data — often used to catch credit card fraud — is called ___ ___.\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "Spotting the outlier automatically.",
+        flagHash: "640c8c703e09890e329f6f78cb894a58811a36a07faf8ff52461673ecc096d22" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Spotting an outlier. Given the dataset [12, 14, 13, 15, 95, 14, 13], which value is the outlier?\n\nSubmit as flag{number}.",
+        hint: "Every other value clusters tightly between 12 and 15 — one value doesn't.",
+        flagHash: "ad48ff99415b2f007dc35b7eb553fd1eb35ebfa2f2f308acd9488eeb86f71fa8" }
+    ] },
+
+  { id: "ap-m4f", module: 4, title: "Models & Simulations", category: "Data Science",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Modeling. A simplified representation of a real-world system, built to study how it behaves, is called a ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "A simplified stand-in for something real.",
+        flagHash: "9372c470eeadd5ecd9c3c74c2b3cb633f8e2f2fad799250a0f70d652b6b825e4" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Modeling. Running a model forward over time to predict how a real system will behave under different conditions is called a ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Weather forecasting relies heavily on this.",
+        flagHash: "32e4bc02a7ccf34d72692db7f08aa945102e290beb4832d5673b987015d8cb4f" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Limits of models. Because a model is always a simplification, its results are only as trustworthy as the ___ it was built on — leave out a real-world factor, and the model's predictions can mislead.\n\nSubmit as flag{word} (lowercase).",
+        hint: "What you assumed to be true when you built the model.",
+        flagHash: "3df701b1e5b876b215d9ccdc7219d51151063b291cb9b40205151ad87f27af07" }
+    ] },
+
+  { id: "ap-m4g", module: 4, title: "Crowdsourcing & Human Computation", category: "Data Science",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Collecting data. Gathering input, work, or data from a large group of people, often over the Internet, is called ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The 'crowd' does the work.",
+        flagHash: "9684a5a18d1dd52c4749ea0b8a0595cc9a990676b2c21ce8e5d49be2cef9c08a" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Human computation. reCAPTCHA challenges (like picking every image with a street sign) double as this: using human responses to solve problems computers struggle with, like training computer vision. This is called ___ ___.\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "Humans doing the computing a machine can't do alone — two words.",
+        flagHash: "db67da5acf9a3678cc770736a981b66d832fb6a6907f6530ab75b39805025251" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Why crowdsourcing works at scale. A single reCAPTCHA click barely trains an image model at all — but across millions of users solving millions of puzzles, the ___ of small contributions adds up to something powerful.\n\nSubmit as flag{word} (lowercase).",
+        hint: "What you get from adding up many small pieces.",
+        flagHash: "09f5ffef28309853265c4a98d0e56e1be522b6b402d8193594fd05103064fc6a" }
+    ] },
 
   /* MODULE 5 — Creative Task ──────────────────────────────────────────────── */
   { id: "ap-m5a", module: 5, title: "The Create Task", category: "Creative Task",
@@ -6605,6 +6894,128 @@ window.COURSE_CONFIG.apcsp.ctf = {
   { id: "ap-m6-vocab", module: 6, title: "Vocabulary Recall", category: "Vocabulary", type: "vocab",
     bias: ["network","internet","packet","bandwidth","path","encryption","authentication","protocol","device"],
     hardMode: "wordsearch" },
+
+  { id: "ap-m6c", module: 6, title: "Social Networking & Search", category: "Innovative Technologies",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Innovative technologies. A web service that lets users build a profile and connect with other people online is a ___ network.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The kind of network Instagram or Facebook is.",
+        flagHash: "3e860f41a5ea92c49803d6ec96d452693b6dcefb0e8c0bf0125b0e3debac5281" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Innovative technologies. Software that crawls, indexes, and ranks web pages so users can find information is called a search ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Google is one of these.",
+        flagHash: "ed9f6f25068608efd412958da4dfc19328ca3511251fa6d5f9c42baf230e32f8" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Impact of computing. Personalizing search and social results based only on your past clicks can trap you in a narrow, one-sided view of information. This effect is called a filter ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "You're stuck inside it, only seeing what confirms your existing views.",
+        flagHash: "df4ac416257333cf770e5b162da9c2a06b37e428d0a4035ec3a0f114df08d231" }
+    ] },
+
+  { id: "ap-m6d", module: 6, title: "Cloud Computing", category: "Innovative Technologies",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Innovative technologies. Storing and processing data on remote servers accessed over the Internet, instead of on your own local device, is called ___ computing.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Named after where the servers seem to be, from a user's point of view.",
+        flagHash: "56681010b753e1abe52c449d0aab291b28f1808a3a91b6baeaa726883baad4b0" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Cloud computing. A key benefit of cloud computing is the ability to increase or decrease the amount of computing resources you use on demand. This benefit is called ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Resources can scale up or down to match demand.",
+        flagHash: "5433943468150b2698dbb83989d3a425bf8bb11ac271b99b9ce6a81c111429dd" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Risks of cloud computing. Keeping your only copy of important data with a single cloud provider means that if their service goes down, you lose access entirely. This risk is called a single point of ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "One weak spot that can bring the whole system down.",
+        flagHash: "16d34b5e7bcb341ee6cb3d16495d90e93fbe57c46d3827432613210a24ebca30" }
+    ] },
+
+  { id: "ap-m6e", module: 6, title: "The Digital Divide", category: "Innovative Technologies",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Impact of computing. The gap between people who have reliable access to computing and the Internet and those who don't is called the ___ ___.\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "Access, not ability — two words.",
+        flagHash: "ead2d27a35a7a7b50487955b3fc899c32b5552744c35b5297ae36db15c169969" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Impact of computing. Beyond just owning a device, a major factor in the digital divide is whether someone has fast, reliable, always-on Internet, called ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The kind of high-speed connection cable or fiber internet provides.",
+        flagHash: "7577bf4f5683bf6cc6ce6324381b36449961897cc37140d2171d5953244fb6e5" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Impact of computing. Even with a device and Internet access, someone who lacks the skills and knowledge to use technology effectively still faces a digital ___ gap.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Knowing how to read, evaluate, and use technology and information — a skill, not a connection.",
+        flagHash: "578756ca4aa16d8872610a5aaa78460fd30fbe93379ff7284fe65d66ca606755" }
+    ] },
+
+  { id: "ap-m6f", module: 6, title: "Network Infrastructure", category: "Innovative Technologies",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Computing systems & networks. A device that connects multiple devices within a local network and directs data between them is a ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The box in your house that your WiFi comes from.",
+        flagHash: "74c95604043427f0bee1d0e16bfa53afd537f736ad0073c4cc4e1ccb3a82b5dc" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Computing systems & networks. A set of agreed-upon rules that governs how devices communicate over a network is called a ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "HTTP and TCP are both examples of this kind of rule set.",
+        flagHash: "2ea88c7a30351b12a4dcfc06cdce2af6eab18416176466c2500cb6ef74f745bf" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — The Internet. The unique numerical address assigned to a device so it can be located and reached on a network is its ___ address.\n\nSubmit as flag{abbreviation} (lowercase).",
+        hint: "Two letters.",
+        flagHash: "bb9af5d1915da1fbc132ced081325efcd2e63e4804f96890f42e9739677237a4" }
+    ] },
+
+  { id: "ap-m6g", module: 6, title: "TCP & the Domain Name System", category: "Innovative Technologies",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — The Internet. The protocol responsible for breaking data into packets, sending them, and reliably reassembling them at the destination is abbreviated ___.\n\nSubmit as flag{abbreviation} (lowercase).",
+        hint: "Three letters, works alongside IP.",
+        flagHash: "00645195b93272275b50a6c935a23fb62e3e793e8476e83414fed0fcdfee8b41" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — The Internet. The system that translates human-readable domain names, like example.com, into the numerical IP addresses computers actually use, is called the ___ ___ ___.\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "Three words — the initials are DNS.",
+        flagHash: "b74a800b9bcb288c4abedf397719f14b5e0fa9528480188b4c138ffa87ca0648" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Tracing how the Internet resolves a name. In order, once you type a domain name and hit enter: 1) your browser asks a DNS resolver to look it up, 2) the resolver returns the matching ___, 3) your browser connects directly to that address to load the page.\n\nSubmit as flag{abbreviation} (lowercase) — what does the resolver hand back?",
+        hint: "The numerical address DNS exists to look up.",
+        flagHash: "bb9af5d1915da1fbc132ced081325efcd2e63e4804f96890f42e9739677237a4" }
+    ] },
+
+  { id: "ap-m6h", module: 6, title: "IoT & the World Wide Web", category: "Innovative Technologies",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Innovative technologies. A network of everyday physical devices, like thermostats, cameras, and appliances, connected to the Internet is called the Internet of ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "The last word of the acronym IoT.",
+        flagHash: "7e1ddfc85ae45a95330209c0834c59876011aa587be693354cbd1f40bf637fcd" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — The Internet. The system of linked, browsable documents — web pages — accessed over the Internet using HTTP is called the ___ ___ ___.\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "Its initials are WWW.",
+        flagHash: "8000e3df3a19f57b48268f5e2970ff5d6566ce8f0b93c49b58d1f02360e4960a" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Distinguishing the Internet from the Web. The Internet is the physical network of connected devices; the World Wide Web is a ___ that runs on top of that network, made of linked documents.\n\nSubmit as flag{word} (lowercase).",
+        hint: "It USES the Internet — it isn't the same thing as the Internet.",
+        flagHash: "9df6b026a8c6c26e3c3acd2370a16e93fffdc0015ff5bd879218788025db0280" }
+    ] },
+
+  { id: "ap-m6i", module: 6, title: "Restricted Information & Attacks", category: "Innovative Technologies",
+    levels: [
+      { difficulty: "Easy", points: 50,
+        prompt: "Objective — Safe computing. Information whose access is limited to specific authorized individuals or groups, like medical or financial records, is called ___ information.\n\nSubmit as flag{word} (lowercase).",
+        hint: "Not everyone is allowed to see it.",
+        flagHash: "7a0d91593df9293a8942f7438cb88f7ab1a8e354da491f567f9939b1303920f5" },
+      { difficulty: "Medium", points: 100,
+        prompt: "Objective — Safe computing. Software that secretly monitors a user's activity and collects their information without consent is called ___.\n\nSubmit as flag{word} (lowercase).",
+        hint: "It 'spies' on you.",
+        flagHash: "7fefe28ac7f684e6ec95aead061566a0a6a5bf89d6e88a13e81b806b10f9fe59" },
+      { difficulty: "Hard", points: 150,
+        prompt: "Objective — Safe computing. An attacker floods a server with so much traffic that it can no longer respond to legitimate users. This is called a ___ ___ ___ attack.\n\nSubmit as flag{words_with_underscores} (lowercase).",
+        hint: "The server is denied the ability to provide its service — three words, initials DoS.",
+        flagHash: "7bcd0ddec6a82ca90db043c583c1920c18514aa350cfb900d92b8c4d11bab3cb" }
+    ] },
+
+  { id: "ap-m6-dns-order", module: 6, title: "Resolve a Domain Name", category: "Innovative Technologies", type: "order", points: 150,
+    intro: "Objective — The Internet. Order the steps of resolving a domain name to load a web page, first to last.",
+    steps: [
+      "Type a domain name into the browser",
+      "Browser asks a DNS resolver to look it up",
+      "DNS resolver returns the matching IP address",
+      "Browser connects to that IP address",
+      "Server sends back the page to display"
+    ] },
 
   /* MODULE 7 — AP Test Prep ───────────────────────────────────────────────── */
   { id: "ap-m7a", module: 7, title: "Big Ideas Review", category: "AP Test Prep",

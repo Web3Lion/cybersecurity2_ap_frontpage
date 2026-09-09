@@ -106,6 +106,7 @@ button{font-family:inherit;cursor:pointer;}
       <button class="fxThemeBtn" data-theme="circuit" onclick="FX.setTheme('circuit')">Circuit Pulse</button>
       <button class="fxThemeBtn" data-theme="matrix-code" onclick="FX.setTheme('matrix-code')">Matrix — Code Rain</button>
       <button class="fxThemeBtn" data-theme="matrix-glyph" onclick="FX.setTheme('matrix-glyph')">Matrix — Alien Glyphs</button>
+      <button class="fxThemeBtn" data-theme="matrix-solid" onclick="FX.setTheme('matrix-solid')">Matrix — Solid Color</button>
       <button class="fxThemeBtn" data-theme="aurora" onclick="FX.setTheme('aurora')">Data Aurora</button>
     </div>
     <div>
@@ -237,7 +238,7 @@ var FX = (function(){
     pulses = pulses.filter(function(p){ return p.t < 1; });
   }
   var frameCount = 0;
-  function drawMatrix(set){
+  function drawMatrix(set, solid){
     ctx.fillStyle = "rgba(10,14,20,0.13)"; ctx.fillRect(0,0,w,h);
     ctx.font = "16px monospace"; ctx.textAlign="center";
     frameCount++;
@@ -251,7 +252,11 @@ var FX = (function(){
           c.chars[i] = set[Math.floor(Math.random()*set.length)];
         }
         var ch = c.chars[i];
-        if (i===0) ctx.fillStyle = "hsla("+hue+",30%,92%,0.95)";
+        if (solid){
+          if (i===0) ctx.fillStyle = "hsla("+hue+",50%,90%,0.95)";
+          else ctx.fillStyle = "hsla("+hue+",90%,"+(60-t*25)+"%,"+(0.85-t*0.8)+")";
+        }
+        else if (i===0) ctx.fillStyle = "hsla("+hue+",30%,92%,0.95)";
         else if (c.colorMode === "rainbow") ctx.fillStyle = "hsla("+((t*300 + frameCount*2)%360)+",90%,60%,"+(0.85-t*0.8)+")";
         else ctx.fillStyle = "hsla("+MATRIX_HUES[c.colorMode]+",90%,"+(60-t*25)+"%,"+(0.85-t*0.8)+")";
         ctx.fillText(ch, c.x+10, cy);
@@ -279,8 +284,9 @@ var FX = (function(){
   }
   function loop(){
     if (theme==="circuit") drawCircuit();
-    else if (theme==="matrix-code") drawMatrix(glyphSet);
-    else if (theme==="matrix-glyph") drawMatrix(alienSet);
+    else if (theme==="matrix-code") drawMatrix(glyphSet, false);
+    else if (theme==="matrix-glyph") drawMatrix(alienSet, false);
+    else if (theme==="matrix-solid") drawMatrix(glyphSet, true);
     else if (theme==="aurora") drawAurora();
     raf = requestAnimationFrame(loop);
   }
